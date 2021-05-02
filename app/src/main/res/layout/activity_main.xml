@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/beige"
+    android:orientation="vertical"
+    tools:context=".ui.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/checkers"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="60sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/start_button"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        app:cornerRadius ="15dp"
+        android:backgroundTint="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45sp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="45sp"
+        android:gravity="center_horizontal"
+        android:text="@string/start"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/rules_button"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        app:cornerRadius ="15dp"
+        android:backgroundTint="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="45sp"
+        android:gravity="center_horizontal"
+        android:text="@string/rules"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/exit_button"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        app:cornerRadius ="15dp"
+        android:backgroundTint="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="45sp"
+        android:gravity="center_horizontal"
+        android:text="@string/exit"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50sp"
+        android:paddingTop="100dp"
+        android:paddingRight="50sp"
+        app:srcCompat="@drawable/checkers_png1" />
+</LinearLayout>

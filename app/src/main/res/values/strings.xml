@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Checkers</string>
+    <string name="start">Start the game</string>
+    <string name="rules">Rules</string>
+    <string name="exit">Exit</string>
+    <string name="checkers">Russian checkers</string>
+    <string name="gamerules">Game Rules</string>
+    <string name= "textrules">Checkers is played by two players. Each player begins the game with 12 colored discs (typically, one set of pieces is black and the other white). White moves first. Players then alternate moves, pieces always move diagonally. Single pieces are always limited to forward moves. A piece making a capturing move (a jump) leaps over one of the opponents pieces, landing in a straight diagonal line on the other side. If a simple checker reaches the last horizontal, it becomes a king. Kings are able to move an arbitrary number of fields along the selected diagonal, both forward and backward. The winner is the side that managed to destroy or block the movement of all the opponents checkers </string>
+    <string name="back">Back</string>
+    <string name="prestart">Write your names and choose a color</string>
+    <string name="startgame">Start</string>
+
+    <string name="zero">0</string>
+</resources>
