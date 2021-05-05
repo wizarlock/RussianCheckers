@@ -55,8 +55,12 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
 
     }
 
-    @Override
-    public void onCheckerRemoved(Cell from, CheckersDesk.Checker checker) {
 
+    public void onCheckerRemoved(Cell position) {
+        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(position.getY()));
+        ImageView checkerImage = new ImageView(this);
+        checkerImage.setImageDrawable(null);
+        LinearLayout layout = Objects.requireNonNull(row).findViewWithTag(String.valueOf(position.getX()));
+        layout.addView(checkerImage);
     }
 }
