@@ -34,7 +34,8 @@
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="2"
@@ -48,7 +49,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="4"
@@ -62,7 +64,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="6"
@@ -76,7 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
         </LinearLayout>
 
@@ -91,7 +95,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="1"
@@ -105,7 +110,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="3"
@@ -119,7 +125,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="5"
@@ -133,7 +140,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="7"
@@ -161,7 +169,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="2"
@@ -175,7 +184,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="4"
@@ -189,7 +199,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="6"
@@ -203,7 +214,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
         </LinearLayout>
 
@@ -217,7 +229,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="1"
@@ -231,7 +244,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="3"
@@ -245,7 +259,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="5"
@@ -259,7 +274,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="7"
@@ -287,7 +303,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="2"
@@ -301,7 +318,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="4"
@@ -315,7 +333,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="6"
@@ -329,7 +348,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
         </LinearLayout>
 
@@ -343,7 +363,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="1"
@@ -357,7 +378,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="3"
@@ -371,7 +393,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="5"
@@ -385,7 +408,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="7"
@@ -413,7 +437,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="2"
@@ -427,7 +452,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="4"
@@ -441,7 +467,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="6"
@@ -455,7 +482,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
         </LinearLayout>
 
@@ -469,7 +497,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="1"
@@ -483,7 +512,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="3"
@@ -497,7 +527,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="5"
@@ -511,7 +542,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/brown">
+                android:background="@color/brown"
+                android:onClick="onClick">
             </LinearLayout>
             <LinearLayout
                 android:tag="7"

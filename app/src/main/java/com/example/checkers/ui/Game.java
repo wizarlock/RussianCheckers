@@ -42,11 +42,11 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     }
 
     @Override
-    public void onCheckerAdded(Cell position, CheckersDesk.Checker checker) {
-        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(position.getY()));
+    public void onCheckerAdded(Cell cell) {
+        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(cell.getY()));
         ImageView checkerImage = new ImageView(this);
-        checkerImage.setImageResource(checker.getColor() == CheckersDesk.Colors.WHITE ? R.drawable.white : R.drawable.black);
-        LinearLayout layout = Objects.requireNonNull(row).findViewWithTag(String.valueOf(position.getX()));
+        checkerImage.setImageResource(cell.getChecker().getColor() == CheckersDesk.Colors.WHITE ? R.drawable.white : R.drawable.black);
+        LinearLayout layout = Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
         layout.addView(checkerImage);
     }
 
@@ -56,11 +56,16 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     }
 
 
-    public void onCheckerRemoved(Cell position) {
-        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(position.getY()));
+    public void onCheckerRemoved(Cell cell) {
+        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(cell.getY()));
         ImageView checkerImage = new ImageView(this);
         checkerImage.setImageDrawable(null);
-        LinearLayout layout = Objects.requireNonNull(row).findViewWithTag(String.valueOf(position.getX()));
+        LinearLayout layout = Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
         layout.addView(checkerImage);
+    }
+    public void onClick(View view) {
+        Cell position = new Cell (Integer.parseInt(view.getTag().toString()),Integer.parseInt(((View) view.getParent()).getTag().toString()),null);
+
+
     }
 }

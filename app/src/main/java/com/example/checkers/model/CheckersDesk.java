@@ -1,5 +1,9 @@
 package com.example.checkers.model;
 
+
+
+import android.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,26 +36,26 @@ public class CheckersDesk {
     }
 
     public interface OnCheckerActionListener {
-        void onCheckerAdded(Cell position, Checker checker);
+        void onCheckerAdded(Cell cell);
 
         void onCheckerMoved(Cell from, Cell to, Checker checker);
 
-        void onCheckerRemoved(Cell from);
+        void onCheckerRemoved(Cell cell);
     }
 
     private OnCheckerActionListener onCheckerActionListener;
     public static final int rows = 8;
     public static final int columns = 8;
 
-    private final List<List<Checker>> checkers;
+    private final List<List<Cell>> cells;
 
     public CheckersDesk() {
-        checkers = new ArrayList<>(rows);
+        cells = new ArrayList<>(rows);
 
         for (int i = 0; i < rows; i++) {
-            checkers.add(i, new ArrayList<>(columns));
+            cells.add(i, new ArrayList<>(columns));
             for (int j = 0; j < columns; j++) {
-                checkers.get(i).add(j, null);
+                cells.get(i).add(j, new Cell(i, j, null));
             }
         }
     }
@@ -61,8 +65,8 @@ public class CheckersDesk {
             for (int j = 0; j < columns; j++) {
                 if ((i + j) % 2 != 0) {
                     Checker checker = new Checker(Colors.BLACK);
-                    checkers.get(i).add(j, checker);
-                    onCheckerActionListener.onCheckerAdded(new Cell(i, j), checker);
+                    cells.get(i).get(j).setChecker(checker);
+                    onCheckerActionListener.onCheckerAdded(new Cell(i, j, checker));
                 }
             }
         }
@@ -70,72 +74,45 @@ public class CheckersDesk {
             for (int j = 0; j < columns; j++) {
                 if ((i + j) % 2 != 0) {
                     Checker checker = new Checker(Colors.WHITE);
-                    checkers.get(i).add(j, checker);
-                    onCheckerActionListener.onCheckerAdded(new Cell(i, j), checker);
+                    cells.get(i).get(j).setChecker(checker);
+                    onCheckerActionListener.onCheckerAdded(new Cell(i, j, checker));
                 }
             }
         }
     }
 
-    public boolean hasChecker(Cell cell) {
-        return checkers.get(cell.getY()).get(cell.getX()) != null;
+    public boolean cellExist(Cell cell) {
+        return cell.getX() <= 7 && cell.getX() >= 0 && cell.getY() <= 7 && cell.getY() >= 0;
     }
 
-    public boolean cellExist(Cell position) {
-        return position.getX() <= 7 && position.getX() >= 0 && position.getY() <= 7 && position.getY() >= 0;
-    }
+    public List<Pair<Cell, Cell>> possibleWays(Cell cell) {
+        List<Pair<Cell, Cell>> possibleWays = new ArrayList<>();
 
-    public List<Cell> possibleWays(Cell position, CheckersDesk.Checker checker) {
-        boolean flag = false;
-        List<Cell> possibleWays = new ArrayList<>();
-        Map<Cell, Cell> requiredMoves = new HashMap<>();
-        if (cellExist(new Cell(position.getY() + 1, position.getX() + 1))) {
-            if (!hasChecker(new Cell(position.getY() + 1, position.getX() + 1))) {
-                if (checker.getColor() == Colors.BLACK)
-                    possibleWays.add(new Cell(position.getY() + 1, position.getX() + 1));
-            } else {
-                if (checkers.get(position.getY() + 1).get(position.getX() + 1).getColor() != checker.getColor())
-                    if (cellExist(new Cell(position.getY() + 2, position.getX() + 2)))
-                        if (!hasChecker(new Cell(position.getY() + 2, position.getX() + 2)))
-                            requiredMoves.put(new Cell(position.getY() + 2, position.getX() + 2), new Cell (position.getY() + 1, position.getX() + 1));
-            }
-        }
-        if (cellExist(new Cell(position.getY() - 1, position.getX() + 1))) {
-            if (!hasChecker(new Cell(position.getY() - 1, position.getX() + 1))) {
-                if (checker.getColor() == Colors.BLACK)
-                    possibleWays.add(new Cell(position.getY() - 1, position.getX() + 1));
-            } else {
-                if (checkers.get(position.getY() - 1).get(position.getX() + 1).getColor() != checker.getColor())
-                    if (cellExist(new Cell(position.getY() - 2, position.getX() + 2)))
-                        if (!hasChecker(new Cell(position.getY() - 2, position.getX() + 2)))
-                            requiredMoves.put(new Cell(position.getY() - 2, position.getX() + 2), new Cell(position.getY() - 1, position.getX() + 1));
-            }
-        }
-        if (cellExist(new Cell(position.getY() + 1, position.getX() - 1))) {
-            if (!hasChecker(new Cell(position.getY() + 1, position.getX() - 1))) {
-                if (checker.getColor() == Colors.WHITE)
-                    possibleWays.add(new Cell(position.getY() + 1, position.getX() - 1));
-            } else {
-                if (checkers.get(position.getY() + 1).get(position.getX() - 1).getColor() != checker.getColor())
-                    if (cellExist(new Cell(position.getY() + 2, position.getX() - 2)))
-                        if (!hasChecker(new Cell(position.getY() + 2, position.getX() - 2)))
-                            requiredMoves.put(new Cell(position.getY() + 2, position.getX() - 2), new Cell(position.getY() + 1, position.getX() - 1));
-            }
-        }
-        if (cellExist(new Cell(position.getY() - 1, position.getX() - 1))) {
-            if (!hasChecker(new Cell(position.getY() - 1, position.getX() - 1))) {
-                if (checker.getColor() == Colors.WHITE)
-                    possibleWays.add(new Cell(position.getY() - 1, position.getX() - 1));
-            } else {
-                if (checkers.get(position.getY() - 1).get(position.getX() - 1).getColor() != checker.getColor())
-                    if (cellExist(new Cell(position.getY() - 2, position.getX() - 2)))
-                        if (!hasChecker(new Cell(position.getY() - 2, position.getX() - 2)))
-                            requiredMoves.put(new Cell(position.getY() - 2, position.getX() - 2), new Cell(position.getY() - 1, position.getX() - 1));
-            }
+        List<Pair<Cell, Cell>> requiredMoves = new ArrayList<>();
+
+        Map<Integer, Pair<Integer, Integer>> coordinates = new HashMap<>();
+        coordinates.put(0, new Pair<>(-1, -1));
+        coordinates.put(1, new Pair<>(-1, 1));
+        coordinates.put(2, new Pair<>(1, -1));
+        coordinates.put(3, new Pair<>(1, 1));
+
+        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : coordinates.entrySet()) {
+            if (cellExist(new Cell(cell.getY() + entry.getValue().second, cell.getX() + entry.getValue().first, null)))
+                if (cells.get(cell.getY() + entry.getValue().second).get(cell.getX() + entry.getValue().first).getChecker() == null) {
+                    if ((cell.getChecker().getColor() == Colors.BLACK && entry.getValue().second == 1) ||
+                            (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().second == -1))
+                        possibleWays.add(new Pair<>(new Cell(cell.getY() + entry.getValue().second, cell.getX() + entry.getValue().first, null), null));
+                } else {
+                    if (cells.get(cell.getY() + entry.getValue().second).get(cell.getX() + entry.getValue().first).getChecker().getColor() != cell.getChecker().getColor())
+                        if (cellExist(new Cell(cell.getY() + 2* entry.getValue().second, cell.getX() + 2* entry.getValue().first,null)))
+                            if (cells.get(cell.getY() + 2* entry.getValue().second).get(cell.getX() + 2* entry.getValue().first).getChecker() == null)
+                                requiredMoves.add(new Pair<>(new Cell(cell.getY() + 2* entry.getValue().second, cell.getX() + 2* entry.getValue().first,null),
+                                        new Cell(cell.getY() + entry.getValue().second, cell.getX() + entry.getValue().first,null)));
+                }
         }
         if (requiredMoves.size() == 0) return possibleWays;
-
-
+        else return requiredMoves;
+    }
 }
 
 
