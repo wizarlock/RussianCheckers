@@ -18,8 +18,4 @@ public class Cell {
     }
     public CheckersDesk.Checker getChecker() {return checker;}
     public void setChecker(CheckersDesk.Checker checker) { this.checker = checker; }
-
-    public boolean hasChecker(Cell cell) {
-        return checker != null;
-    }
 }
