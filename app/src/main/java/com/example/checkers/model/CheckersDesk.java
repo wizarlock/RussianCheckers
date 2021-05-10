@@ -1,7 +1,5 @@
 package com.example.checkers.model;
 
-
-
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ public class CheckersDesk {
 
         public Colors getColor() {
             return color;
+
         }
     }
 
@@ -38,7 +37,7 @@ public class CheckersDesk {
     public interface OnCheckerActionListener {
         void onCheckerAdded(Cell cell);
 
-        void onCheckerMoved(Cell from, Cell to, Checker checker);
+        void onCheckerMoved(Cell from, Cell to);
 
         void onCheckerRemoved(Cell cell);
     }
@@ -90,26 +89,25 @@ public class CheckersDesk {
         coordinates.put(3, new Pair<>(1, 1));
 
         List<Pair<Cell, Cell>> requiredMoves = new ArrayList<>();
-        for (int i = 0; i < rows; i++)
-            for (int j = 0; i < columns; i++) {
-                Cell cell = new Cell (i, j, cells.get(i).get(j).getChecker());
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                Cell cell = new Cell(i, j, cells.get(i).get(j).getChecker());
                 if (cell.getChecker() != null)
-                if ((cell.getChecker().getColor() == Colors.BLACK && whoseMove) ||
-                        (!whoseMove && cells.get(i).get(j).getChecker().getColor() == Colors.WHITE))
-                    for (Map.Entry<Integer, Pair<Integer, Integer>> entry : coordinates.entrySet()) {
-                        if (cellExist(new Cell(cell.getY() + 2* entry.getValue().first, cell.getX() + 2* entry.getValue().second,null)))
-                            if (cells.get(cell.getX() + entry.getValue().second).get(cell.getY() + entry.getValue().first).getChecker() != null)
-                                if (cells.get(cell.getX() + entry.getValue().second).get(cell.getY() + entry.getValue().first).getChecker().getColor() != cell.getChecker().getColor())
-                                    if (cells.get(cell.getX() + 2* entry.getValue().second).get(cell.getY() + 2* entry.getValue().first).getChecker() == null)
-                                        requiredMoves.add(new Pair<>(new Cell(cell.getY() + 2* entry.getValue().first, cell.getX() + 2* entry.getValue().second,null), cell));
-                    }
+                    if ((cell.getChecker().getColor() == Colors.BLACK && whoseMove) ||
+                            (!whoseMove && cells.get(i).get(j).getChecker().getColor() == Colors.WHITE))
+                        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : coordinates.entrySet()) {
+                            if (cellExist(new Cell(cell.getY() + 2 * entry.getValue().first, cell.getX() + 2 * entry.getValue().second, null)))
+                                if (cells.get(cell.getY() + entry.getValue().first).get(cell.getX() + entry.getValue().second).getChecker() != null)
+                                    if (cells.get(cell.getY() + entry.getValue().first).get(cell.getX() + entry.getValue().second).getChecker().getColor() != cell.getChecker().getColor())
+                                        if (cells.get(cell.getY() + 2 * entry.getValue().first).get(cell.getX() + 2 * entry.getValue().second).getChecker() == null)
+                                            requiredMoves.add(new Pair<>(new Cell(cell.getY() + 2 * entry.getValue().first, cell.getX() + 2 * entry.getValue().second, null), cell));
+                        }
             }
+        }
         return requiredMoves;
     }
     public static List<Pair<Cell, Cell>> possibleWays(Cell cell, boolean whoseMove) {
         List<Pair<Cell, Cell>> possibleWays = new ArrayList<>();
-
-        List<Pair<Cell, Cell>> requiredMoves = new ArrayList<>();
 
         Map<Integer, Pair<Integer, Integer>> coordinates = new HashMap<>();
         coordinates.put(0, new Pair<>(-1, -1));
@@ -119,20 +117,11 @@ public class CheckersDesk {
 
         for (Map.Entry<Integer, Pair<Integer, Integer>> entry : coordinates.entrySet()) {
             if (cellExist(new Cell(cell.getY() + entry.getValue().first, cell.getX() + entry.getValue().second, null)))
-                if (cells.get(cell.getX() + entry.getValue().second).get(cell.getY() + entry.getValue().first).getChecker() == null)
-                    if ((cell.getChecker().getColor() == Colors.BLACK && entry.getValue().second == 1 && whoseMove) ||
-                            (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().second == -1 && !whoseMove))
+                if (cells.get(cell.getY() + entry.getValue().first).get(cell.getX() + entry.getValue().second).getChecker() == null)
+                    if ((cell.getChecker().getColor() == Colors.BLACK && entry.getValue().first == 1 && whoseMove) ||
+                            (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().first == -1 && !whoseMove))
                         possibleWays.add(new Pair<>(new Cell(cell.getY() + entry.getValue().first, cell.getX() + entry.getValue().second, null), null));
-                //} else {
-                 //   if (cells.get(cell.getX() + entry.getValue().second).get(cell.getY() + entry.getValue().first).getChecker().getColor() != cell.getChecker().getColor())
-                  //      if (cellExist(new Cell(cell.getY() + 2* entry.getValue().first, cell.getX() + 2* entry.getValue().second,null)))
-                  //          if (cells.get(cell.getX() + 2* entry.getValue().second).get(cell.getY() + 2* entry.getValue().first).getChecker() == null)
-                  //              requiredMoves.add(new Pair<>(new Cell(cell.getY() + 2* entry.getValue().first, cell.getX() + 2* entry.getValue().second,null),
-                    //                    new Cell(cell.getY() + entry.getValue().first, cell.getX() + entry.getValue().second,null)));
-                //}
         }
-        //if (requiredMoves.size() == 0) return possibleWays;
-        //else return requiredMoves;
             return  possibleWays;
     }
 }

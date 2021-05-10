@@ -1,5 +1,7 @@
 package com.example.checkers.model;
 
+import androidx.annotation.Nullable;
+
 public class Cell {
     private final int x;
     private final int y;
@@ -18,4 +20,11 @@ public class Cell {
     }
     public CheckersDesk.Checker getChecker() {return checker;}
     public void setChecker(CheckersDesk.Checker checker) { this.checker = checker; }
+
+    @Override
+    public boolean equals(@Nullable Object other) {
+        if (!(other instanceof Cell)) return false;
+        if (this.getX() != ((Cell) other).getX()) return false;
+        return this.getY() == ((Cell) other).getY();
+    }
 }
