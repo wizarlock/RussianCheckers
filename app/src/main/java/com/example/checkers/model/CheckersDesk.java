@@ -78,6 +78,7 @@ public class CheckersDesk {
             }
         }
     }
+
     public static boolean cellExist(Cell cell) {
         return cell.getX() <= 7 && cell.getX() >= 0 && cell.getY() <= 7 && cell.getY() >= 0;
     }
@@ -123,6 +124,23 @@ public class CheckersDesk {
                         possibleWays.add(new Pair<>(new Cell(cell.getY() + entry.getValue().first, cell.getX() + entry.getValue().second, null), null));
         }
             return  possibleWays;
+    }
+    public static List<Pair<Cell, Cell>> canEatMore(Cell cell) {
+        Map<Integer, Pair<Integer, Integer>> coordinates = new HashMap<>();
+        coordinates.put(0, new Pair<>(-1, -1));
+        coordinates.put(1, new Pair<>(-1, 1));
+        coordinates.put(2, new Pair<>(1, -1));
+        coordinates.put(3, new Pair<>(1, 1));
+
+        List<Pair<Cell, Cell>> possibleWays = new ArrayList<>();
+        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : coordinates.entrySet()) {
+            if (cellExist(new Cell(cell.getY() + 2 * entry.getValue().first, cell.getX() + 2 * entry.getValue().second, null)))
+                if (cells.get(cell.getY() + entry.getValue().first).get(cell.getX() + entry.getValue().second).getChecker() != null)
+                    if (cells.get(cell.getY() + entry.getValue().first).get(cell.getX() + entry.getValue().second).getChecker().getColor() != cell.getChecker().getColor())
+                        if (cells.get(cell.getY() + 2 * entry.getValue().first).get(cell.getX() + 2 * entry.getValue().second).getChecker() == null)
+                            possibleWays.add(new Pair<>(new Cell(cell.getY() + 2 * entry.getValue().first, cell.getX() + 2 * entry.getValue().second, null), null));
+        }
+        return possibleWays;
     }
 }
 
