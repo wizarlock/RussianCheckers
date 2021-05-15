@@ -12,14 +12,22 @@ public class Cell {
         this.x = x;
         this.checker = checker;
     }
+
     public int getX() {
         return x;
     }
+
     public int getY() {
         return y;
     }
-    public CheckersDesk.Checker getChecker() {return checker;}
-    public void setChecker(CheckersDesk.Checker checker) { this.checker = checker; }
+
+    public CheckersDesk.Checker getChecker() {
+        return checker;
+    }
+
+    public void setChecker(CheckersDesk.Checker checker) {
+        this.checker = checker;
+    }
 
     @Override
     public boolean equals(@Nullable Object other) {
@@ -28,3 +36,4 @@ public class Cell {
         return this.getY() == ((Cell) other).getY();
     }
 }
+

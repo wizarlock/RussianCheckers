@@ -38,6 +38,7 @@
         android:layout_marginRight="45sp"
         android:backgroundTint="@color/gray"
         android:gravity="center_horizontal"
+        android:onClick="onClick"
         android:text="@string/back"
         android:textSize="30sp"
         app:cornerRadius="15dp"

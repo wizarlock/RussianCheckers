@@ -1,26 +1,32 @@
 package com.example.checkers.ui;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.checkers.R;
 
-public class GameRules extends AppCompatActivity {
+public class EndGameForWhite extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rules);
+        setContentView(R.layout.activity_end_game_for_white);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    public void onClick(View view) {
-        Intent intent = new Intent(GameRules.this, MainActivity.class);
+    public void rematch(View view) {
+        Intent intent = new Intent(EndGameForWhite.this, Game.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void mainMenu(View view) {
+        Intent intent = new Intent(EndGameForWhite.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
