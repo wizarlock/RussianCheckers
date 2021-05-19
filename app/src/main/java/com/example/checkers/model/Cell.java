@@ -37,7 +37,10 @@ public class Cell {
     public boolean equals(@Nullable Object other) {
         if (!(other instanceof Cell)) return false;
         if (this.getX() != ((Cell) other).getX()) return false;
-        return this.getY() == ((Cell) other).getY();
+        if (this.getY() != ((Cell) other).getY()) return false;
+        if (this.getChecker() == null && ((Cell) other).getChecker() == null) return true;
+        if ((this.getChecker() != null && ((Cell) other).getChecker() == null) || (this.getChecker() == null && ((Cell) other).getChecker() != null)) return false;
+        return this.getChecker().getColor() == ((Cell) other).getChecker().getColor();
     }
 }
 

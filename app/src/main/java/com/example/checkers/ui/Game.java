@@ -1,4 +1,5 @@
 package com.example.checkers.ui;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
@@ -7,8 +8,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
 import com.example.checkers.R;
 import com.example.checkers.model.Cell;
 import com.example.checkers.model.CheckersDesk;
@@ -21,7 +24,7 @@ import static com.example.checkers.model.CheckersDesk.whoseMove;
 
 public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerActionListener {
     public LinearLayout table;
-    private final CheckersDesk desk = new CheckersDesk();
+    public final CheckersDesk desk = new CheckersDesk();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
 
         table = findViewById(R.id.desk);
 
+        desk.checkersDesk();
         desk.setOnCheckerActionListener(this);
         desk.initDesk();
 
@@ -95,7 +99,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
 
     //Подсвечивает клетки для возможных ходов
     @Override
-    public List<View> colorForPossibleMoves(List<Pair<Cell, Cell>> pairs, View view,List<List<Cell>> cells, Cell cell) {
+    public List<View> colorForPossibleMoves(List<Pair<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
         List<View> views = new ArrayList<>();
         if (cells.get(cell.getY()).get(cell.getX()).getChecker() != null) {
             view.setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
