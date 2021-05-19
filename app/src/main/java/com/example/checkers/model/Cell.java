@@ -29,6 +29,10 @@ public class Cell {
         this.checker = checker;
     }
 
+    public static boolean cellExist(Cell cell) {
+        return cell.getX() <= 7 && cell.getX() >= 0 && cell.getY() <= 7 && cell.getY() >= 0;
+    }
+
     @Override
     public boolean equals(@Nullable Object other) {
         if (!(other instanceof Cell)) return false;
