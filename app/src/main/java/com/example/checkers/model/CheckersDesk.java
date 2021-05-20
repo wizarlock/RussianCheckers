@@ -58,9 +58,7 @@ public class CheckersDesk {
 
         void onCheckerRemoved(Cell cell);
 
-        List<View> colorForRequiredMoves(List<Map<Cell, Cell>> pairs);
-
-        List<View> colorForPossibleMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell);
+        List<View> colorForMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell);
 
         void boardClear(List<View> views);
     }
@@ -432,7 +430,7 @@ public class CheckersDesk {
                     } else {
                         pairs = pair;
                     }
-                    viewPick = onCheckerActionListener.colorForPossibleMoves(pairs, view, cells, cell);
+                    viewPick = onCheckerActionListener.colorForMoves(pairs, view, cells, cell);
                     selectedCell = cell;
                     count = 1;
                 }

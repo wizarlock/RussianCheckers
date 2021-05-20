@@ -86,24 +86,9 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
         getCheckerLayout(cell).removeView(checkerImage);
     }
 
-    //Подсвечивает клетки для обязательных ходов
+    //Подсвечивает клетки
     @Override
-    public List<View> colorForRequiredMoves(List<Map<Cell, Cell>> pairs) {
-        List<View> views = new ArrayList<>();
-        for (int i = 0; i <= pairs.size() - 1; i++) {
-            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet()) {
-                getCheckerLayout(entry.getValue()).setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
-                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
-                views.add(getCheckerLayout(entry.getValue()));
-                views.add(getCheckerLayout(entry.getKey()));
-            }
-        }
-        return views;
-    }
-
-    //Подсвечивает клетки для возможных ходов
-    @Override
-    public List<View> colorForPossibleMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
+    public List<View> colorForMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
         List<View> views = new ArrayList<>();
         if (cells.get(cell.getY()).get(cell.getX()).getChecker() != null) {
             view.setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
