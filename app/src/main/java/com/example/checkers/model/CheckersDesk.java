@@ -1,8 +1,6 @@
 package com.example.checkers.model;
 
-import android.util.Pair;
 import android.view.View;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +15,7 @@ public class CheckersDesk {
     public static Boolean whoseMove = false;
     public static int count;
     public static Cell selectedCell;
-    public static List<Pair<Cell, Cell>> pairs;
+    public static List<Map<Cell, Cell>> pairs;
     public static List<View> viewPick = new ArrayList<>();
 
     public static class Checker {
@@ -29,7 +27,9 @@ public class CheckersDesk {
             this.condition = condition;
         }
 
-        public Colors getColor() { return color; }
+        public Colors getColor() {
+            return color;
+        }
 
         public void setCondition(Boolean condition) {
             this.condition = condition;
@@ -43,6 +43,7 @@ public class CheckersDesk {
     public enum Colors {
         WHITE, BLACK
     }
+
     public void setOnCheckerActionListener(OnCheckerActionListener onCheckerActionListener) {
         this.onCheckerActionListener = onCheckerActionListener;
     }
@@ -56,9 +57,9 @@ public class CheckersDesk {
 
         void onCheckerRemoved(Cell cell);
 
-        List<View> colorForRequiredMoves(List<Pair<Cell, Cell>> pairs);
+        List<View> colorForRequiredMoves(List<Map<Cell, Cell>> pairs);
 
-        List<View> colorForPossibleMoves(List<Pair<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell);
+        List<View> colorForPossibleMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell);
 
         void boardClear(List<View> views);
     }
@@ -90,7 +91,7 @@ public class CheckersDesk {
                     if (checker != null) {
                         cells.get(i).get(j).setChecker(checker);
                         if (onCheckerActionListener != null)
-                        onCheckerActionListener.onCheckerAdded(new Cell(i, j, checker));
+                            onCheckerActionListener.onCheckerAdded(new Cell(i, j, checker));
                     }
                 }
             }
@@ -107,7 +108,7 @@ public class CheckersDesk {
     }
 
     //Передвижение шашек для тестов
-    public void checkerMoving (Cell from, Cell to) {
+    public void checkerMoving(Cell from, Cell to) {
         cells.get(to.getY()).get(to.getX()).setChecker(from.getChecker());
         cells.get(from.getY()).get(from.getX()).setChecker(null);
     }
@@ -123,10 +124,10 @@ public class CheckersDesk {
     }
 
     //Ищет возможности съесть для игрока
-    public List<Pair<Cell, Cell>> requiredMoves(boolean whoseMove) {
+    public List<Map<Cell, Cell>> requiredMoves(boolean whoseMove) {
         Map<Integer, Coordinates> coordinates = initCoordinates();
         int coefficient = 1;
-        List<Pair<Cell, Cell>> requiredMoves = new ArrayList<>();
+        List<Map<Cell, Cell>> requiredMoves = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 Cell cell = cells.get(i).get(j);
@@ -138,8 +139,11 @@ public class CheckersDesk {
                                 if (cellExist(new Cell(cell.getY() + 2 * entry.getValue().getY(), cell.getX() + 2 * entry.getValue().getX(), null)))
                                     if (cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()).getChecker() != null)
                                         if (cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()).getChecker().getColor() != cell.getChecker().getColor())
-                                            if (cells.get(cell.getY() + 2 * entry.getValue().getY()).get(cell.getX() + 2 * entry.getValue().getX()).getChecker() == null)
-                                                requiredMoves.add(new Pair<>(cells.get(cell.getY() + 2 * entry.getValue().getY()).get(cell.getX() + 2 * entry.getValue().getX()), cell));
+                                            if (cells.get(cell.getY() + 2 * entry.getValue().getY()).get(cell.getX() + 2 * entry.getValue().getX()).getChecker() == null) {
+                                                Map<Cell, Cell> map = new HashMap<>();
+                                                map.put(cells.get(cell.getY() + 2 * entry.getValue().getY()).get(cell.getX() + 2 * entry.getValue().getX()), cell);
+                                                requiredMoves.add(map);
+                                            }
                             }
                         } else {
                             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
@@ -148,7 +152,9 @@ public class CheckersDesk {
                                         if (cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()).getChecker().getColor() != cell.getChecker().getColor()) {
                                             while (cellExist(new Cell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX(), null))) {
                                                 if (cells.get(cell.getY() + (coefficient + 1) * entry.getValue().getY()).get(cell.getX() + (coefficient + 1) * entry.getValue().getX()).getChecker() == null) {
-                                                    requiredMoves.add(new Pair<>(cells.get(cell.getY() + (coefficient + 1) * entry.getValue().getY()).get(cell.getX() + (coefficient + 1) * entry.getValue().getX()), cell));
+                                                    Map<Cell, Cell> map = new HashMap<>();
+                                                    map.put(cells.get(cell.getY() + (coefficient + 1) * entry.getValue().getY()).get(cell.getX() + (coefficient + 1) * entry.getValue().getX()), cell);
+                                                    requiredMoves.add(map);
                                                     coefficient++;
                                                 } else break;
                                             }
@@ -165,8 +171,8 @@ public class CheckersDesk {
     }
 
     //Ищет возможность для просто перемещения
-    public List<Pair<Cell, Cell>> possibleWays(Cell cell, boolean whoseMove) {
-        List<Pair<Cell, Cell>> possibleWays = new ArrayList<>();
+    public List<Map<Cell, Cell>> possibleWays(Cell cell, boolean whoseMove) {
+        List<Map<Cell, Cell>> possibleWays = new ArrayList<>();
         Map<Integer, Coordinates> coordinates = initCoordinates();
         int coefficient = 1;
         if (!cell.getChecker().getCondition()) {
@@ -174,16 +180,22 @@ public class CheckersDesk {
                 if (cellExist(new Cell(cell.getY() + entry.getValue().getY(), cell.getX() + entry.getValue().getX(), null)))
                     if (cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()).getChecker() == null)
                         if ((cell.getChecker().getColor() == Colors.BLACK && entry.getValue().getY() == 1 && whoseMove) ||
-                                (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().getY() == -1 && !whoseMove))
-                            possibleWays.add(new Pair<>(cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()), null));
+                                (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().getY() == -1 && !whoseMove)) {
+                            Map<Cell, Cell> map = new HashMap<>();
+                            map.put(cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()), null);
+                            possibleWays.add(map);
+                        }
             }
         } else {
             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                 while (cellExist(new Cell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX(), null))) {
                     if (cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()).getChecker() == null) {
                         if ((cell.getChecker().getColor() == Colors.BLACK && whoseMove) ||
-                                (cell.getChecker().getColor() == Colors.WHITE && !whoseMove))
-                            possibleWays.add(new Pair<>(cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()), null));
+                                (cell.getChecker().getColor() == Colors.WHITE && !whoseMove)) {
+                            Map<Cell, Cell> map = new HashMap<>();
+                            map.put(cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()), null);
+                            possibleWays.add(map);
+                        }
                         coefficient++;
                     } else break;
                 }
@@ -301,10 +313,11 @@ public class CheckersDesk {
         return (cells.get(posY).get(posX));
     }
 
-    //Не позволяет любой шашке есть, есть может только та, которая есть в списке
-    public boolean canPickEater(List<Pair<Cell, Cell>> pairs, Cell selectedCell) {
+    //Не позволяет любой шашке есть, есть может только та, которая есть в списке, тут возможен баг
+    public boolean canPickEater(List<Map<Cell, Cell>> pairs, Cell selectedCell) {
         for (int i = 0; i <= pairs.size() - 1; i++) {
-            if (selectedCell.equals(pairs.get(i).second)) return true;
+            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet())
+                if (selectedCell.equals(entry.getValue())) return true;
         }
         return false;
     }
@@ -316,18 +329,20 @@ public class CheckersDesk {
     }
 
     //Не позволяет перемещаться шашкой на ту клетку, которой нет в списке возможных вариантов
-    public boolean canMove(List<Pair<Cell, Cell>> pairs, Cell cell) {
+    public boolean canMove(List<Map<Cell, Cell>> pairs, Cell cell) {
         for (int i = 0; i <= pairs.size() - 1; i++) {
-            if (pairs.get(i).first.equals(cell)) return true;
+            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet())
+                if (entry.getKey().equals(cell)) return true;
         }
         return false;
     }
 
     //Не позволяет перемещаться шашкой на ту клетку, которой нет в списке возможных вариантов (для съедения)
-    public boolean canEatThis(List<Pair<Cell, Cell>> pairs, Cell cell) {
+    public boolean canEatThis(List<Map<Cell, Cell>> pairs, Cell cell) {
         for (int i = 0; i <= pairs.size() - 1; i++) {
-            if (pairs.get(i).second.equals(selectedCell) && pairs.get(i).first.equals(cell))
-                return true;
+            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet())
+                if (entry.getValue().equals(selectedCell) && entry.getKey().equals(cell))
+                    return true;
         }
         return false;
     }
@@ -335,12 +350,27 @@ public class CheckersDesk {
     //Процесс перемещения
     private void moving(Cell selectedCell, Cell cell1) {
         checkerMoving(selectedCell, cell1);
-        onCheckerActionListener.onCheckerMoved(selectedCell, cell1);
+        if (onCheckerActionListener != null)
+            onCheckerActionListener.onCheckerMoved(selectedCell, cell1);
         if (becomingQueen(cells.get(cell1.getY()).get(cell1.getX()))) {
-            onCheckerActionListener.onCheckerRemoved(cells.get(cell1.getY()).get(cell1.getX()));
-            onCheckerActionListener.onQueenAdded(cells.get(cell1.getY()).get(cell1.getX()));
+            if (onCheckerActionListener != null) {
+                onCheckerActionListener.onCheckerRemoved(cells.get(cell1.getY()).get(cell1.getX()));
+                onCheckerActionListener.onQueenAdded(cells.get(cell1.getY()).get(cell1.getX()));
+            }
         }
         count = 0;
+
+    }
+
+    //Процесс поедания
+    public void consumption(Cell selectedCell, Cell cell1) {
+        Cell deleted = deletedChecker(selectedCell, cell1);
+        moving(selectedCell, cell1);
+        if (onCheckerActionListener != null)
+            onCheckerActionListener.onCheckerRemoved(cells.get(deleted.getY()).get(deleted.getX()));
+        cells.get(deleted.getY()).get(deleted.getX()).setChecker(null);
+        //Если возможно съесть больше
+        if (!canEatMore(cells.get(cell1.getY()).get(cell1.getX()))) whoseMove = !whoseMove;
     }
 
     public boolean startGame(View view) {
@@ -354,20 +384,16 @@ public class CheckersDesk {
             } else {
                 if (canMove(pairs, cell1)) {
                     //Если возможно съесть
-                    if (pairs.get(0).second != null) {
-                        if (canEatThis(pairs, cell1)) {
-                            Cell deleted = deletedChecker(selectedCell, cell1);
+                    for (Map.Entry<Cell, Cell> entry : pairs.get(0).entrySet())
+                        if (entry.getValue() != null) {
+                            if (canEatThis(pairs, cell1)) {
+                                consumption(selectedCell, cell1);
+                            }
+                            // Простой ход
+                        } else {
                             moving(selectedCell, cell1);
-                            onCheckerActionListener.onCheckerRemoved(cells.get(deleted.getY()).get(deleted.getX()));
-                            cells.get(deleted.getY()).get(deleted.getX()).setChecker(null);
-                            //Если возможно съесть больше
-                            if (!canEatMore(cells.get(cell1.getY()).get(cell1.getX()))) whoseMove = !whoseMove;
+                            whoseMove = !whoseMove;
                         }
-                        // Простой ход
-                    } else {
-                        moving(selectedCell, cell1);
-                        whoseMove = !whoseMove;
-                    }
                 }
             }
             onCheckerActionListener.boardClear(viewPick);
@@ -379,8 +405,8 @@ public class CheckersDesk {
             //не позволяет выбрать шашку оппонента
             if (cell.getChecker() != null)
                 if (canPick(whoseMove, cell)) {
-                    List<Pair<Cell, Cell>> requiredMoves = requiredMoves(whoseMove);
-                    List<Pair<Cell, Cell>> pair = possibleWays(cell, whoseMove);
+                    List<Map<Cell, Cell>> requiredMoves = requiredMoves(whoseMove);
+                    List<Map<Cell, Cell>> pair = possibleWays(cell, whoseMove);
                     if (requiredMoves.size() != 0) {
                         pairs = requiredMoves;
                         viewPick = onCheckerActionListener.colorForRequiredMoves(pairs);

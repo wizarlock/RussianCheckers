@@ -18,6 +18,7 @@ import com.example.checkers.model.CheckersDesk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.checkers.model.CheckersDesk.whoseMove;
@@ -38,6 +39,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
         desk.setOnCheckerActionListener(this);
         desk.initDesk();
 
+        whoseMove = false;
     }
 
     private View findWithTag(ViewGroup parent, Object tag) {
@@ -86,28 +88,32 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
 
     //Подсвечивает клетки для обязательных ходов
     @Override
-    public List<View> colorForRequiredMoves(List<Pair<Cell, Cell>> pairs) {
+    public List<View> colorForRequiredMoves(List<Map<Cell, Cell>> pairs) {
         List<View> views = new ArrayList<>();
         for (int i = 0; i <= pairs.size() - 1; i++) {
-            getCheckerLayout(pairs.get(i).second).setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
-            getCheckerLayout(pairs.get(i).first).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
-            views.add(getCheckerLayout(pairs.get(i).second));
-            views.add(getCheckerLayout(pairs.get(i).first));
+            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet()) {
+                getCheckerLayout(entry.getValue()).setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
+                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
+                views.add(getCheckerLayout(entry.getValue()));
+                views.add(getCheckerLayout(entry.getKey()));
+            }
         }
         return views;
     }
 
     //Подсвечивает клетки для возможных ходов
     @Override
-    public List<View> colorForPossibleMoves(List<Pair<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
+    public List<View> colorForPossibleMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
         List<View> views = new ArrayList<>();
         if (cells.get(cell.getY()).get(cell.getX()).getChecker() != null) {
             view.setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
             views.add(view);
         }
         for (int i = 0; i <= pairs.size() - 1; i++) {
-            getCheckerLayout(pairs.get(i).first).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
-            views.add(getCheckerLayout(pairs.get(i).first));
+            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet()) {
+                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
+                views.add(getCheckerLayout(entry.getKey()));
+            }
         }
         return views;
     }

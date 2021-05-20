@@ -39,7 +39,10 @@ public class Cell {
         if (this.getX() != ((Cell) other).getX()) return false;
         if (this.getY() != ((Cell) other).getY()) return false;
         if (this.getChecker() == null && ((Cell) other).getChecker() == null) return true;
-        if ((this.getChecker() != null && ((Cell) other).getChecker() == null) || (this.getChecker() == null && ((Cell) other).getChecker() != null)) return false;
+        if ((this.getChecker() != null && ((Cell) other).getChecker() == null) || (this.getChecker() == null && ((Cell) other).getChecker() != null))
+            return false;
+        if (this.getChecker().getCondition() != ((Cell) other).getChecker().getCondition())
+            return false;
         return this.getChecker().getColor() == ((Cell) other).getChecker().getColor();
     }
 }
