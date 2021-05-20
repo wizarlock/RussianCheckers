@@ -17,6 +17,7 @@ public class CheckersDesk {
     public static Cell selectedCell;
     public static List<Map<Cell, Cell>> pairs;
     public static List<View> viewPick = new ArrayList<>();
+    public static Cell eatingCell = null;
 
     public static class Checker {
         private final Colors color;
@@ -307,15 +308,6 @@ public class CheckersDesk {
         return (cells.get(posY).get(posX));
     }
 
-    //Не позволяет любой шашке есть, есть может только та, которая есть в списке, тут возможен баг
-    private boolean canPickEater(List<Map<Cell, Cell>> pairs, Cell selectedCell) {
-        for (int i = 0; i <= pairs.size() - 1; i++) {
-            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet())
-                if (selectedCell.equals(entry.getValue())) return true;
-        }
-        return false;
-    }
-
     //Не позволяет выбрать шашки другого игрока в свой ход
     private boolean canPick(boolean whoseMove, Cell cell) {
         if (whoseMove) return cell.getChecker().getColor() == BLACK;
@@ -364,7 +356,34 @@ public class CheckersDesk {
             onCheckerActionListener.onCheckerRemoved(cells.get(deleted.getY()).get(deleted.getX()));
         cells.get(deleted.getY()).get(deleted.getX()).setChecker(null);
         //Если возможно съесть больше
-        if (!canEatMore(cells.get(cell1.getY()).get(cell1.getX()))) whoseMove = !whoseMove;
+        if (!canEatMore(cells.get(cell1.getY()).get(cell1.getX()))) {
+            eatingCell = null;
+            whoseMove = !whoseMove;
+        } else eatingCell = cells.get(cell1.getY()).get(cell1.getX());
+        count = 0;
+    }
+
+    //Находит обязательный ход для шашки
+    private List<Map<Cell, Cell>> filterForRequiredMoves(List<Map<Cell, Cell>> pair, Cell cell) {
+        List<Map<Cell, Cell>> newPair = new ArrayList<>();
+        for (int i = 0; i < pair.size(); i++)
+            for (Map.Entry<Cell, Cell> entry : pair.get(i).entrySet())
+                if (eatingCell != null) {
+                    if (cell.equals(eatingCell)) {
+                        if (cell.equals(entry.getValue())) {
+                            Map<Cell, Cell> map = new HashMap<>();
+                            map.put(entry.getKey(), entry.getValue());
+                            newPair.add(map);
+                        }
+                    }
+                } else {
+                    if (cell.equals(entry.getValue())) {
+                        Map<Cell, Cell> map = new HashMap<>();
+                        map.put(entry.getKey(), entry.getValue());
+                        newPair.add(map);
+                    }
+                }
+        return newPair;
     }
 
     public boolean startGame(View view) {
@@ -380,9 +399,16 @@ public class CheckersDesk {
                     //Если возможно съесть
                     for (Map.Entry<Cell, Cell> entry : pairs.get(0).entrySet())
                         if (entry.getValue() != null) {
-                            if (canEatThis(pairs, cell1)) {
-                                consumption(selectedCell, cell1);
+                            if (eatingCell != null) {
+                                selectedCell = eatingCell;
+                                if (canEatThis(pairs, cell1))
+                                    consumption(eatingCell, cell1);
+                            } else {
+                                if (canEatThis(pairs, cell1))
+                                    consumption(selectedCell, cell1);
                             }
+                            count = 0;
+
                             // Простой ход
                         } else {
                             moving(selectedCell, cell1);
@@ -402,16 +428,13 @@ public class CheckersDesk {
                     List<Map<Cell, Cell>> requiredMoves = requiredMoves(whoseMove);
                     List<Map<Cell, Cell>> pair = possibleWays(cell, whoseMove);
                     if (requiredMoves.size() != 0) {
-                        pairs = requiredMoves;
-                        viewPick = onCheckerActionListener.colorForRequiredMoves(pairs);
-                        selectedCell = cell;
-                        if (canPickEater(requiredMoves, selectedCell)) count = 1;
+                        pairs = filterForRequiredMoves(requiredMoves, cell);
                     } else {
                         pairs = pair;
-                        viewPick = onCheckerActionListener.colorForPossibleMoves(pairs, view, cells, cell);
-                        selectedCell = cell;
-                        count = 1;
                     }
+                    viewPick = onCheckerActionListener.colorForPossibleMoves(pairs, view, cells, cell);
+                    selectedCell = cell;
+                    count = 1;
                 }
         }
         return finishGame(whoseMove);
