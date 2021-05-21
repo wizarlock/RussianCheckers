@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.checkers.R;
 import com.example.checkers.model.Cell;
+import com.example.checkers.model.Checker;
 import com.example.checkers.model.CheckersDesk;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     @Override
     public void onCheckerAdded(Cell cell) {
         ImageView checkerImage = new ImageView(this);
-        checkerImage.setImageResource(cell.getChecker().getColor() == CheckersDesk.Colors.WHITE ? R.drawable.white : R.drawable.black);
+        checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.white : R.drawable.black);
         getCheckerLayout(cell).addView(checkerImage);
     }
 
@@ -67,7 +68,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     @Override
     public void onQueenAdded(Cell cell) {
         ImageView checkerImage = new ImageView(this);
-        checkerImage.setImageResource(cell.getChecker().getColor() == CheckersDesk.Colors.WHITE ? R.drawable.queen1 : R.drawable.queen0);
+        checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.queen1 : R.drawable.queen0);
         getCheckerLayout(cell).addView(checkerImage);
     }
 

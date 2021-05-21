@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.checkers.model.Cell.cellExist;
-import static com.example.checkers.model.CheckersDesk.Colors.BLACK;
-import static com.example.checkers.model.CheckersDesk.Colors.WHITE;
+import static com.example.checkers.model.Checker.Colors.BLACK;
+import static com.example.checkers.model.Checker.Colors.WHITE;
 
 public class CheckersDesk {
     public static Boolean whoseMove = false;
@@ -19,30 +19,22 @@ public class CheckersDesk {
     public static List<View> viewPick = new ArrayList<>();
     public static Cell eatingCell = null;
 
-    public static class Checker {
-        private final Colors color;
-        private boolean condition;
+    public static class Coordinates {
+        private final int y;
+        private final int x;
 
-        public Checker(Colors color, boolean condition) {
-            this.color = color;
-            this.condition = condition;
+        public Coordinates(int y, int x) {
+            this.y = y;
+            this.x = x;
         }
 
-        public Colors getColor() {
-            return color;
+        public int getX() {
+            return x;
         }
 
-        public void setCondition(Boolean condition) {
-            this.condition = condition;
+        public int getY() {
+            return y;
         }
-
-        public boolean getCondition() {
-            return condition;
-        }
-    }
-
-    public enum Colors {
-        WHITE, BLACK
     }
 
     public void setOnCheckerActionListener(OnCheckerActionListener onCheckerActionListener) {
@@ -85,8 +77,8 @@ public class CheckersDesk {
             for (int j = 0; j < columns; j++) {
                 if ((i + j) % 2 != 0) {
                     Checker checker = null;
-                    if (i < 3) checker = new Checker(Colors.BLACK, false);
-                    else if (i > rows - 4) checker = new Checker(Colors.WHITE, false);
+                    if (i < 3) checker = new Checker(BLACK, false);
+                    else if (i > rows - 4) checker = new Checker(WHITE, false);
                     if (checker != null) {
                         cells.get(i).get(j).setChecker(checker);
                         if (onCheckerActionListener != null)
@@ -99,7 +91,7 @@ public class CheckersDesk {
     //Проверяет возможность стать дамкой
     public boolean becomingQueen(Cell cell) {
         if (cell.getChecker() != null)
-            if ((cell.getChecker().getColor() == Colors.BLACK && cell.getY() == 7) || (cell.getChecker().getColor() == Colors.WHITE && cell.getY() == 0)) {
+            if ((cell.getChecker().getColor() == BLACK && cell.getY() == 7) || (cell.getChecker().getColor() == WHITE && cell.getY() == 0)) {
                 cells.get(cell.getY()).get(cell.getX()).getChecker().setCondition(true);
                 return true;
             }
@@ -125,8 +117,8 @@ public class CheckersDesk {
             for (int j = 0; j < columns; j++) {
                 Cell cell = cells.get(i).get(j);
                 if (cell.getChecker() != null)
-                    if ((cell.getChecker().getColor() == Colors.BLACK && whoseMove) ||
-                            (!whoseMove && cells.get(i).get(j).getChecker().getColor() == Colors.WHITE))
+                    if ((cell.getChecker().getColor() == BLACK && whoseMove) ||
+                            (!whoseMove && cells.get(i).get(j).getChecker().getColor() == WHITE))
                         if (!cell.getChecker().getCondition()) {
                             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                                 if (cellExist(new Cell(cell.getY() + 2 * entry.getValue().getY(), cell.getX() + 2 * entry.getValue().getX(), null)))
@@ -172,8 +164,8 @@ public class CheckersDesk {
             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                 if (cellExist(new Cell(cell.getY() + entry.getValue().getY(), cell.getX() + entry.getValue().getX(), null)))
                     if (cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()).getChecker() == null)
-                        if ((cell.getChecker().getColor() == Colors.BLACK && entry.getValue().getY() == 1 && whoseMove) ||
-                                (cell.getChecker().getColor() == Colors.WHITE && entry.getValue().getY() == -1 && !whoseMove)) {
+                        if ((cell.getChecker().getColor() == BLACK && entry.getValue().getY() == 1 && whoseMove) ||
+                                (cell.getChecker().getColor() == WHITE && entry.getValue().getY() == -1 && !whoseMove)) {
                             Map<Cell, Cell> map = new HashMap<>();
                             map.put(cells.get(cell.getY() + entry.getValue().getY()).get(cell.getX() + entry.getValue().getX()), null);
                             possibleWays.add(map);
@@ -183,8 +175,8 @@ public class CheckersDesk {
             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                 while (cellExist(new Cell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX(), null))) {
                     if (cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()).getChecker() == null) {
-                        if ((cell.getChecker().getColor() == Colors.BLACK && whoseMove) ||
-                                (cell.getChecker().getColor() == Colors.WHITE && !whoseMove)) {
+                        if ((cell.getChecker().getColor() == BLACK && whoseMove) ||
+                                (cell.getChecker().getColor() == WHITE && !whoseMove)) {
                             Map<Cell, Cell> map = new HashMap<>();
                             map.put(cells.get(cell.getY() + coefficient * entry.getValue().getY()).get(cell.getX() + coefficient * entry.getValue().getX()), null);
                             possibleWays.add(map);
@@ -236,14 +228,14 @@ public class CheckersDesk {
                 for (int j = 0; j < columns; j++) {
                     Cell cell = cells.get(i).get(j);
                     if (cell.getChecker() != null)
-                        if (cell.getChecker().getColor() == Colors.WHITE) return false;
+                        if (cell.getChecker().getColor() == WHITE) return false;
                 }
         } else {
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++) {
                     Cell cell = cells.get(i).get(j);
                     if (cell.getChecker() != null)
-                        if (cell.getChecker().getColor() == Colors.BLACK) return false;
+                        if (cell.getChecker().getColor() == BLACK) return false;
                 }
         }
         return true;

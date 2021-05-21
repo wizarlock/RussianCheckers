@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 public class Cell {
     private final int x;
     private final int y;
-    private CheckersDesk.Checker checker;
+    private Checker checker;
 
-    public Cell(int y, int x, CheckersDesk.Checker checker) {
+    public Cell(int y, int x, Checker checker) {
         this.y = y;
         this.x = x;
         this.checker = checker;
@@ -21,11 +21,11 @@ public class Cell {
         return y;
     }
 
-    public CheckersDesk.Checker getChecker() {
+    public Checker getChecker() {
         return checker;
     }
 
-    public void setChecker(CheckersDesk.Checker checker) {
+    public void setChecker(Checker checker) {
         this.checker = checker;
     }
 

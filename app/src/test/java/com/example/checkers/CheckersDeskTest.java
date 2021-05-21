@@ -1,6 +1,7 @@
 package com.example.checkers;
 
 import com.example.checkers.model.Cell;
+import com.example.checkers.model.Checker;
 import com.example.checkers.model.CheckersDesk;
 
 import org.junit.Test;
@@ -26,10 +27,10 @@ public class CheckersDeskTest {
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 != 0) {
-                    CheckersDesk.Checker checker = null;
-                    if (i < 3) checker = new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false);
+                    Checker checker = null;
+                    if (i < 3) checker = new Checker(Checker.Colors.BLACK, false);
                     else if (i > 4)
-                        checker = new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false);
+                        checker = new Checker(Checker.Colors.WHITE, false);
                     if (checker != null) newCells.get(i).get(j).setChecker(checker);
                 }
             }
@@ -108,17 +109,17 @@ public class CheckersDeskTest {
         desk.initDesk();
 
         newCells.get(5).get(6).setChecker(null);
-        newCells.get(4).get(7).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(7).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.moving(CheckersDesk.cells.get(5).get(6), CheckersDesk.cells.get(4).get(7));
         assertTrue(assertContentEquals(newCells, CheckersDesk.cells));
 
         newCells.get(2).get(1).setChecker(null);
-        newCells.get(3).get(0).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(3).get(0).setChecker(new Checker(Checker.Colors.BLACK, false));
         desk.moving(CheckersDesk.cells.get(2).get(1), CheckersDesk.cells.get(3).get(0));
         assertTrue(assertContentEquals(newCells, CheckersDesk.cells));
 
         newCells.get(5).get(0).setChecker(null);
-        newCells.get(4).get(1).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(1).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.moving(CheckersDesk.cells.get(0).get(1), CheckersDesk.cells.get(3).get(2));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
 
@@ -193,31 +194,31 @@ public class CheckersDeskTest {
         List<List<Cell>> newCells = newCells();
 
         newCells.get(5).get(6).setChecker(null);
-        newCells.get(4).get(5).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(5).setChecker(new Checker(Checker.Colors.WHITE, false));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
         desk.moving(CheckersDesk.cells.get(5).get(6), CheckersDesk.cells.get(4).get(5));
 
         newCells.get(2).get(7).setChecker(null);
-        newCells.get(3).get(6).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(3).get(6).setChecker(new Checker(Checker.Colors.BLACK, false));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
         desk.moving(CheckersDesk.cells.get(2).get(7), CheckersDesk.cells.get(3).get(6));
 
         newCells.get(4).get(5).setChecker(null);
         newCells.get(3).get(6).setChecker(null);
-        newCells.get(2).get(7).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(2).get(7).setChecker(new Checker(Checker.Colors.WHITE, false));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
         desk.consumption(CheckersDesk.cells.get(4).get(5), CheckersDesk.cells.get(2).get(7));
 
         assertTrue(assertContentEquals(newCells, CheckersDesk.cells));
 
         newCells.get(2).get(5).setChecker(null);
-        newCells.get(3).get(6).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(3).get(6).setChecker(new Checker(Checker.Colors.BLACK, false));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
         desk.moving(CheckersDesk.cells.get(2).get(5), CheckersDesk.cells.get(3).get(6));
 
         newCells.get(2).get(7).setChecker(null);
         newCells.get(3).get(6).setChecker(null);
-        newCells.get(4).get(5).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(5).setChecker(new Checker(Checker.Colors.WHITE, false));
         assertFalse(assertContentEquals(newCells, CheckersDesk.cells));
         desk.consumption(CheckersDesk.cells.get(2).get(7), CheckersDesk.cells.get(4).get(5));
 
@@ -231,41 +232,41 @@ public class CheckersDeskTest {
         List<List<Cell>> newCells = newCells();
 
         newCells.get(5).get(6).setChecker(null);
-        newCells.get(4).get(5).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(5).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.moving(CheckersDesk.cells.get(5).get(6), CheckersDesk.cells.get(4).get(5));
 
         newCells.get(2).get(7).setChecker(null);
-        newCells.get(3).get(6).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(3).get(6).setChecker(new Checker(Checker.Colors.BLACK, false));
         desk.moving(CheckersDesk.cells.get(2).get(7), CheckersDesk.cells.get(3).get(6));
 
         newCells.get(4).get(5).setChecker(null);
         newCells.get(3).get(6).setChecker(null);
-        newCells.get(2).get(7).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(2).get(7).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.consumption(CheckersDesk.cells.get(4).get(5), CheckersDesk.cells.get(2).get(7));
 
         newCells.get(2).get(5).setChecker(null);
-        newCells.get(3).get(4).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(3).get(4).setChecker(new Checker(Checker.Colors.BLACK, false));
         desk.moving(CheckersDesk.cells.get(2).get(5), CheckersDesk.cells.get(3).get(4));
 
         newCells.get(5).get(0).setChecker(null);
-        newCells.get(4).get(1).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(4).get(1).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.moving(CheckersDesk.cells.get(5).get(0), CheckersDesk.cells.get(4).get(1));
 
         newCells.get(1).get(6).setChecker(null);
-        newCells.get(2).get(5).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(2).get(5).setChecker(new Checker(Checker.Colors.BLACK, false));
         desk.moving(CheckersDesk.cells.get(1).get(6), CheckersDesk.cells.get(2).get(5));
 
         newCells.get(4).get(1).setChecker(null);
-        newCells.get(3).get(0).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        newCells.get(3).get(0).setChecker(new Checker(Checker.Colors.WHITE, false));
         desk.moving(CheckersDesk.cells.get(4).get(1), CheckersDesk.cells.get(3).get(0));
 
         newCells.get(0).get(5).setChecker(null);
-        newCells.get(1).get(6).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        newCells.get(1).get(6).setChecker(new Checker(Checker.Colors.BLACK, false));
         desk.moving(CheckersDesk.cells.get(0).get(5), CheckersDesk.cells.get(1).get(6));
 
         newCells.get(2).get(7).setChecker(null);
         newCells.get(1).get(6).setChecker(null);
-        newCells.get(0).get(5).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, true));
+        newCells.get(0).get(5).setChecker(new Checker(Checker.Colors.WHITE, true));
         desk.consumption(CheckersDesk.cells.get(2).get(7), CheckersDesk.cells.get(0).get(5));
 
         assertTrue(assertContentEquals(newCells, CheckersDesk.cells));
@@ -297,9 +298,9 @@ public class CheckersDeskTest {
     public void finishGame() {
         desk.checkersDesk();
 
-        CheckersDesk.cells.get(3).get(0).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
-        CheckersDesk.cells.get(4).get(1).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
-        CheckersDesk.cells.get(5).get(2).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
+        CheckersDesk.cells.get(3).get(0).setChecker(new Checker(Checker.Colors.BLACK, false));
+        CheckersDesk.cells.get(4).get(1).setChecker(new Checker(Checker.Colors.WHITE, false));
+        CheckersDesk.cells.get(5).get(2).setChecker(new Checker(Checker.Colors.WHITE, false));
 
         assertTrue(desk.finishGame(true));
 
@@ -308,8 +309,8 @@ public class CheckersDeskTest {
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 != 0) {
-                    CheckersDesk.Checker checker = null;
-                    if (i > 4) checker = new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false);
+                    Checker checker = null;
+                    if (i > 4) checker = new Checker(Checker.Colors.WHITE, false);
                     if (checker != null) {
                         CheckersDesk.cells.get(i).get(j).setChecker(checker);
                     }
@@ -319,9 +320,9 @@ public class CheckersDeskTest {
 
         desk.checkersDesk();
 
-        CheckersDesk.cells.get(3).get(0).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.WHITE, false));
-        CheckersDesk.cells.get(2).get(1).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
-        CheckersDesk.cells.get(1).get(2).setChecker(new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false));
+        CheckersDesk.cells.get(3).get(0).setChecker(new Checker(Checker.Colors.WHITE, false));
+        CheckersDesk.cells.get(2).get(1).setChecker(new Checker(Checker.Colors.BLACK, false));
+        CheckersDesk.cells.get(1).get(2).setChecker(new Checker(Checker.Colors.BLACK, false));
 
         assertTrue(desk.finishGame(false));
 
@@ -330,8 +331,8 @@ public class CheckersDeskTest {
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 != 0) {
-                    CheckersDesk.Checker checker = null;
-                    if (i < 3) checker = new CheckersDesk.Checker(CheckersDesk.Colors.BLACK, false);
+                    Checker checker = null;
+                    if (i < 3) checker = new Checker(Checker.Colors.BLACK, false);
                     if (checker != null) {
                         CheckersDesk.cells.get(i).get(j).setChecker(checker);
                     }
@@ -339,8 +340,8 @@ public class CheckersDeskTest {
             }
         assertTrue(desk.finishGame(false));
 
-            desk.checkersDesk();
-            desk.initDesk();
+        desk.checkersDesk();
+        desk.initDesk();
 
         assertFalse(desk.finishGame(false));
         assertFalse(desk.finishGame(false));
