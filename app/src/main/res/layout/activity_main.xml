@@ -39,7 +39,7 @@
         android:id="@+id/rules_button"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp"
-        app:cornerRadius ="35dp"
+        app:cornerRadius ="15dp"
         android:backgroundTint="@color/gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
