@@ -29,8 +29,8 @@ public class Cell {
         this.checker = checker;
     }
 
-    public static boolean cellExist(Cell cell) {
-        return cell.getX() <= 7 && cell.getX() >= 0 && cell.getY() <= 7 && cell.getY() >= 0;
+    public boolean cellExist(int posY, int posX) {
+        return posY <= 7 && posY >= 0 && posX <= 7 && posX >= 0;
     }
 
     @Override

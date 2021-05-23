@@ -2,7 +2,6 @@ package com.example.checkers.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.example.checkers.model.CheckersDesk.whoseMove;
 
 public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerActionListener {
     public LinearLayout table;
@@ -39,8 +37,6 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
         desk.checkersDesk();
         desk.setOnCheckerActionListener(this);
         desk.initDesk();
-
-        whoseMove = false;
     }
 
     private View findWithTag(ViewGroup parent, Object tag) {
@@ -113,9 +109,9 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     }
 
     //Осуществляет переход на другую активити, если игра завершена
-    public void toFinish(boolean whoseMove) {
+    public void toFinish(String win) {
         Intent intent;
-        if (whoseMove) {
+        if (win.equals("White")) {
             intent = new Intent(Game.this, EndGameForWhite.class);
         } else {
             intent = new Intent(Game.this, EndGameForBlack.class);
@@ -125,6 +121,7 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     }
 
     public void onClick(View view) {
-        if (desk.startGame(view)) toFinish(whoseMove);
+        String win = desk.startGame(view);
+        if (!win.equals("")) toFinish(win);
     }
 }
