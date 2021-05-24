@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.example.checkers.model.Checker.Colors.BLACK;
 import static com.example.checkers.model.Checker.Colors.WHITE;
@@ -79,7 +80,7 @@ public class CheckersDesk {
                     if (i < 3) checker = new Checker(BLACK, false);
                     else if (i > ROWS - 4) checker = new Checker(WHITE, false);
                     if (checker != null) {
-                        getCell(i, j).setChecker(checker);
+                        Objects.requireNonNull(getCell(i, j)).setChecker(checker);
                         if (onCheckerActionListener != null)
                             onCheckerActionListener.onCheckerAdded(new Cell(i, j, checker));
                     }
@@ -132,7 +133,7 @@ public class CheckersDesk {
         List<Map<Cell, Cell>> requiredMoves = new ArrayList<>();
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
-                Cell cell = getCell(i, j);
+                Cell cell = Objects.requireNonNull(getCell(i, j));
                 if (cell.getChecker() != null)
                     if (correctColorEat(whoseMove, cell))
                         if (!cell.getChecker().getCondition()) {
@@ -140,6 +141,7 @@ public class CheckersDesk {
                                 Cell potentialCell = getCell(cell.getY() + 2 * entry.getValue().getY(), cell.getX() + 2 * entry.getValue().getX());
                                 Cell cellBetweenPotentialCellAndCell = getCell(cell.getY() + entry.getValue().getY(), cell.getX() + entry.getValue().getX());
                                 if (potentialCell != null)
+                                    if (cellBetweenPotentialCellAndCell != null)
                                     if (cellBetweenPotentialCellAndCell.getChecker() != null)
                                         if (cellBetweenPotentialCellAndCell.getChecker().getColor() != cell.getChecker().getColor())
                                             if (potentialCell.getChecker() == null) {
@@ -152,10 +154,12 @@ public class CheckersDesk {
                             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                                 while (getCell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX()) != null) {
                                     Cell potentialCell = getCell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX());
+                                    if (potentialCell != null)
                                     if (potentialCell.getChecker() != null) {
                                         if (potentialCell.getChecker().getColor() != cell.getChecker().getColor()) {
                                             while (getCell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX()) != null) {
                                                 potentialCell = getCell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX());
+                                                if (potentialCell != null)
                                                 if (potentialCell.getChecker() == null) {
                                                     Map<Cell, Cell> map = new HashMap<>();
                                                     map.put(potentialCell, cell);
@@ -195,6 +199,7 @@ public class CheckersDesk {
             for (Map.Entry<Integer, Coordinates> entry : coordinates.entrySet()) {
                 while (getCell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX()) != null) {
                     Cell potential = getCell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX());
+                    if (potential != null)
                     if (potential.getChecker() == null) {
                         if (correctColorEat(whoseMove, cell)) {
                             Map<Cell, Cell> map = new HashMap<>();
@@ -219,6 +224,7 @@ public class CheckersDesk {
                 Cell potentialCell = getCell(cell.getY() + 2 * entry.getValue().getY(), cell.getX() + 2 * entry.getValue().getX());
                 Cell cellBetweenPotentialCellAndCell = getCell(cell.getY() + entry.getValue().getY(), cell.getX() + entry.getValue().getX());
                 if (potentialCell != null)
+                    if (cellBetweenPotentialCellAndCell != null)
                     if (cellBetweenPotentialCellAndCell.getChecker() != null)
                         if (cellBetweenPotentialCellAndCell.getChecker().getColor() != cell.getChecker().getColor())
                             if (potentialCell.getChecker() == null)
@@ -229,6 +235,8 @@ public class CheckersDesk {
                 while (getCell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX()) != null) {
                     Cell cellBetweenPotentialCellAndCell = getCell(cell.getY() + coefficient * entry.getValue().getY(), cell.getX() + coefficient * entry.getValue().getX());
                     Cell potentialCell = getCell(cell.getY() + (coefficient + 1) * entry.getValue().getY(), cell.getX() + (coefficient + 1) * entry.getValue().getX());
+                    if (potentialCell != null)
+                        if (cellBetweenPotentialCellAndCell != null)
                     if (cellBetweenPotentialCellAndCell.getChecker() != null) {
                         if (cellBetweenPotentialCellAndCell.getChecker().getColor() != cell.getChecker().getColor()) {
                             if (potentialCell.getChecker() == null) {
@@ -249,7 +257,7 @@ public class CheckersDesk {
         if (requiredMoves(whoseMove).size() == 0 && checkForMove(whoseMove)) return true;
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLUMNS; j++) {
-                Cell cell = getCell(i, j);
+                Cell cell = Objects.requireNonNull(getCell(i, j));
                 if (cell.getChecker() != null) {
                     if (cell.getChecker().getColor() == WHITE) return false;
                     if (cell.getChecker().getColor() == BLACK) return false;
@@ -262,7 +270,7 @@ public class CheckersDesk {
     private boolean checkForMove(boolean whoseMove) {
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLUMNS; j++) {
-                Cell cell = getCell(i, j);
+                Cell cell = Objects.requireNonNull(getCell(i, j));
                 if (cell.getChecker() != null)
                     if (possibleWays(cell, whoseMove).size() != 0) return false;
             }
@@ -277,7 +285,7 @@ public class CheckersDesk {
         if (pick.getY() > variant.getY()) {
             if (pick.getX() > variant.getX()) {
                 for (int i = pick.getY() - 1; i > variant.getY(); i--) {
-                    if (getCell(i, pick.getX() - coefficient).getChecker() != null) {
+                    if (Objects.requireNonNull(getCell(i, pick.getX() - coefficient)).getChecker() != null) {
                         posX = pick.getX() - coefficient;
                         posY = i;
                         break;
@@ -285,7 +293,7 @@ public class CheckersDesk {
                     coefficient++;
                 }
             } else for (int i = pick.getY() - 1; i > variant.getY(); i--) {
-                if (getCell(i, pick.getX() + coefficient).getChecker() != null) {
+                if (Objects.requireNonNull(getCell(i, pick.getX() + coefficient)).getChecker() != null) {
                     posX = pick.getX() + coefficient;
                     posY = i;
                     break;
@@ -296,7 +304,7 @@ public class CheckersDesk {
         if (pick.getY() < variant.getY()) {
             if (pick.getX() > variant.getX()) {
                 for (int i = pick.getY() + 1; i < variant.getY(); i++) {
-                    if (getCell(i, pick.getX() - coefficient).getChecker() != null) {
+                    if (Objects.requireNonNull(getCell(i, pick.getX() - coefficient)).getChecker() != null) {
                         posX = pick.getX() - coefficient;
                         posY = i;
                         break;
@@ -304,7 +312,7 @@ public class CheckersDesk {
                     coefficient++;
                 }
             } else for (int i = pick.getY() + 1; i < variant.getY(); i++) {
-                if (getCell(i, pick.getX() + coefficient).getChecker() != null) {
+                if (Objects.requireNonNull(getCell(i, pick.getX() + coefficient)).getChecker() != null) {
                     posX = pick.getX() + coefficient;
                     posY = i;
                     break;
@@ -393,7 +401,7 @@ public class CheckersDesk {
 
     public String startGame(View view) {
         if (numberOfClicks == 1) {
-            Cell cellForSecondClick = getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString()));
+            Cell cellForSecondClick = Objects.requireNonNull(getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString())));
             //позволяет перевыбрать шашку
             if (cellForSecondClick.getChecker() != null) {
                 if (cellForSecondClick.getChecker().getColor() == selectedCell.getChecker().getColor())
@@ -423,7 +431,7 @@ public class CheckersDesk {
             allViews.clear();
         }
         if (numberOfClicks == 0) {
-            Cell cellForFirstClick = getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString()));
+            Cell cellForFirstClick = Objects.requireNonNull(getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString())));
             //не позволяет выбрать шашку оппонента
             if (cellForFirstClick.getChecker() != null)
                 if (canPick(blacksMoves, cellForFirstClick)) {
