@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.checkers.R;
-import com.example.checkers.data.ButtonSoundManager;
+import com.example.checkers.data.HintsManager;
+import com.example.checkers.data.SoundsManager;
 import com.example.checkers.data.MusicManager;
 import com.example.checkers.databinding.FragmentMenuBinding;
 
@@ -23,11 +24,13 @@ public class Menu extends Fragment {
     private FragmentMenuBinding binding;
 
     private final MusicManager musicManager;
-    private final ButtonSoundManager buttonSoundManager;
+    private final SoundsManager soundsManager;
+    private final HintsManager hintsManager;
 
-    public Menu(MusicManager musicManager, ButtonSoundManager buttonSoundManager) {
+    public Menu(MusicManager musicManager, SoundsManager soundsManager, HintsManager hintsManager) {
         this.musicManager = musicManager;
-        this.buttonSoundManager = buttonSoundManager;
+        this.soundsManager = soundsManager;
+        this.hintsManager = hintsManager;
     }
 
     @Override
@@ -49,16 +52,16 @@ public class Menu extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.rulesButton.setOnClickListener(v -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
-            replaceFragment(new Rules(buttonSoundManager));
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
+            replaceFragment(new Rules(soundsManager));
         });
         binding.startButton.setOnClickListener(v -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
-            replaceFragment(new Game());
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
+            replaceFragment(new Game(soundsManager, hintsManager));
         });
         binding.settingsButton.setOnClickListener(v -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
-            replaceFragment(new Settings(musicManager, buttonSoundManager));
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
+            replaceFragment(new Settings(musicManager, soundsManager, hintsManager));
         });
     }
 

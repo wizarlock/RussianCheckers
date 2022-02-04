@@ -187,9 +187,11 @@ public class CheckersDesk {
         if (requiredMoves.size() != 0) {
             ordinaryMovesForChecker = null;
             requiredMovesForChecker = requiredMoves;
+            onCheckerActionListener.colorForEat(requiredMovesForChecker, selectedCell);
         } else {
             requiredMovesForChecker = null;
             ordinaryMovesForChecker = ordinaryMoves;
+            onCheckerActionListener.colorForMoves(ordinaryMovesForChecker);
         }
     }
 
@@ -233,6 +235,7 @@ public class CheckersDesk {
     public void startGame(View view) {
         if (numberOfClicks == 1) {
             Cell cellForSecondClick = Objects.requireNonNull(getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString())));
+            onCheckerActionListener.boardClear();
             if (cellForSecondClick.getChecker() != null) numberOfClicks = 0;
             if (requiredMovesForChecker != null) eatStart(cellForSecondClick);
             else if (ordinaryMovesForChecker.contains(cellForSecondClick)) {
@@ -247,8 +250,9 @@ public class CheckersDesk {
 
             if (Objects.requireNonNull(cellForFirstClick).getChecker() != null)
                 if (checkCorrectnessColor(cellForFirstClick)) {
-                    initMoves(cellForFirstClick);
+                    onCheckerActionListener.colorForPick(view);
                     selectedCell = cellForFirstClick;
+                    initMoves(cellForFirstClick);
                     numberOfClicks = 1;
                 }
         }

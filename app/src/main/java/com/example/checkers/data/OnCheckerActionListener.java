@@ -3,9 +3,9 @@ package com.example.checkers.data;
 import android.view.View;
 
 import com.example.checkers.model.Cell;
+import com.example.checkers.model.CellsForEating;
 
 import java.util.List;
-import java.util.Map;
 
 public interface OnCheckerActionListener {
     void onCheckerAdded(Cell cell);
@@ -16,7 +16,11 @@ public interface OnCheckerActionListener {
 
     void onCheckerRemoved(Cell cell);
 
-    List<View> colorForMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell);
+    void colorForPick(View view);
 
-    void boardClear(List<View> views);
+    void colorForMoves(List<Cell> cells);
+
+    void colorForEat(List<CellsForEating> cells, Cell requiredCell);
+
+    void boardClear();
 }

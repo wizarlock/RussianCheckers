@@ -10,7 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.checkers.data.ButtonSoundManager;
+import com.example.checkers.data.HintsManager;
+import com.example.checkers.data.SoundsManager;
 import com.example.checkers.databinding.FragmentSettingsBinding;
 import com.example.checkers.data.MusicManager;
 
@@ -27,11 +28,13 @@ public class Settings extends Fragment {
     public static final boolean DEFAULT_HINTS_ENABLED_KEY = true;
 
     private final MusicManager musicManager;
-    private final ButtonSoundManager buttonSoundManager;
+    private final SoundsManager soundsManager;
+    private final HintsManager hintsManager;
 
-    public Settings(MusicManager musicManager, ButtonSoundManager buttonSoundManager) {
+    public Settings(MusicManager musicManager, SoundsManager soundsManager, HintsManager hintsManager) {
         this.musicManager = musicManager;
-        this.buttonSoundManager = buttonSoundManager;
+        this.soundsManager = soundsManager;
+        this.hintsManager = hintsManager;
     }
 
     @Override
@@ -46,13 +49,18 @@ public class Settings extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.music.setChecked(musicManager.isMusicEnabled());
         binding.music.setOnCheckedChangeListener((switchView, checked) -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
             musicManager.setMusicEnabled(checked);
         });
-        binding.sounds.setChecked(buttonSoundManager.isButtonSoundEnabled());
-        binding.sounds.setOnCheckedChangeListener((switchView, checked) -> buttonSoundManager.setButtonSoundEnabled(checked));
+        binding.sounds.setChecked(soundsManager.isSoundsEnabled());
+        binding.sounds.setOnCheckedChangeListener((switchView, checked) -> soundsManager.setButtonSoundEnabled(checked));
+        binding.hints.setChecked(hintsManager.isHintsEnabled());
+        binding.hints.setOnCheckedChangeListener((switchView, checked) -> {
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
+            hintsManager.setHintsEnabled(checked);
+        });
         binding.back.setOnClickListener(v -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
             requireFragmentManager().popBackStackImmediate();
         });
     }

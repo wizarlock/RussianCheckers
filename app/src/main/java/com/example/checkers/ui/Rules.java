@@ -12,17 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.checkers.data.ButtonSoundManager;
+import com.example.checkers.data.SoundsManager;
 import com.example.checkers.databinding.FragmentRulesBinding;
 
 
 public class Rules extends Fragment {
 
     private FragmentRulesBinding binding;
-    private final ButtonSoundManager buttonSoundManager;
+    private final SoundsManager soundsManager;
 
-    public Rules(ButtonSoundManager buttonSoundManager) {
-        this.buttonSoundManager = buttonSoundManager;
+    public Rules(SoundsManager buttonSoundManager) {
+        this.soundsManager = buttonSoundManager;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Rules extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.back.setOnClickListener(v -> {
-            buttonSoundManager.setButtonSoundEnabled(buttonSoundManager.isButtonSoundEnabled());
+            soundsManager.setButtonSoundEnabled(soundsManager.isSoundsEnabled());
             requireFragmentManager().popBackStackImmediate();
         });
         binding.textView4.setMovementMethod(LinkMovementMethod.getInstance());
@@ -46,7 +46,6 @@ public class Rules extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-
         binding = null;
     }
 }

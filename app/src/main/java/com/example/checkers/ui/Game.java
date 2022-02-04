@@ -14,20 +14,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.checkers.R;
+import com.example.checkers.data.HintsManager;
+import com.example.checkers.data.SoundsManager;
 import com.example.checkers.data.OnCheckerActionListener;
 import com.example.checkers.databinding.FragmentGameBinding;
 import com.example.checkers.model.Cell;
+import com.example.checkers.model.CellsForEating;
 import com.example.checkers.model.Checker;
 import com.example.checkers.model.CheckersDesk;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class Game extends Fragment implements OnCheckerActionListener {
+    private final SoundsManager soundsManager;
+    private final HintsManager hintsManager;
     private FragmentGameBinding binding;
     public final CheckersDesk gameDesk = new CheckersDesk();
+    private final List<View> viewsForClear = new ArrayList<>();
+
+    public Game(SoundsManager soundsManager, HintsManager hintsManager) {
+        this.soundsManager = soundsManager;
+        this.hintsManager = hintsManager;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +57,6 @@ public class Game extends Fragment implements OnCheckerActionListener {
                 for (int j = 0; j <= 7; j++) {
                     ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
                     gr.getChildAt(j).setOnClickListener(gameDesk::startGame);
-
                 }
         });
     }
@@ -91,6 +100,7 @@ public class Game extends Fragment implements OnCheckerActionListener {
         View checkerImage = getCheckerLayout(from).getChildAt(0);
         getCheckerLayout(from).removeView(checkerImage);
         getCheckerLayout(to).addView(checkerImage);
+        soundsManager.setDeskSoundEnabled(soundsManager.isSoundsEnabled());
     }
 
     @Override
@@ -100,25 +110,36 @@ public class Game extends Fragment implements OnCheckerActionListener {
     }
 
     @Override
-    public List<View> colorForMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
-        List<View> views = new ArrayList<>();
-        if (cells.get(cell.getY()).get(cell.getX()).getChecker() != null) {
-            view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pick));
-            views.add(view);
-        }
-        for (int i = 0; i <= pairs.size() - 1; i++) {
-            for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet()) {
-                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.variants));
-                views.add(getCheckerLayout(entry.getKey()));
-            }
-        }
-        return views;
+    public void colorForPick(View view) {
+        view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pick));
+        viewsForClear.add(view);
     }
 
     @Override
-    public void boardClear(List<View> views) {
-        for (int i = 0; i <= views.size() - 1; i++) {
-            views.get(i).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.brown));
-        }
+    public void colorForMoves(List<Cell> cells) {
+        if (hintsManager.isHintsEnabled())
+            for (Cell cell : cells) {
+                getCheckerLayout(cell).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.variants));
+                viewsForClear.add(getCheckerLayout(cell));
+            }
+    }
+
+    @Override
+    public void colorForEat(List<CellsForEating> cells, Cell requiredCell) {
+        if (hintsManager.isHintsEnabled())
+            for (CellsForEating list : cells) {
+                if (list.getRequiredCell().equals(requiredCell)) {
+                    getCheckerLayout(list.getMoving()).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.variants));
+                    viewsForClear.add(getCheckerLayout(list.getMoving()));
+                }
+            }
+    }
+
+    @Override
+    public void boardClear() {
+        for (View view : viewsForClear)
+            view.setBackgroundResource(R.drawable.brownwood);
+        viewsForClear.clear();
     }
 }
+

@@ -1,8 +1,10 @@
 package com.example.checkers.ui;
 
 import static com.example.checkers.ui.Settings.APP_PREFERENCES;
+import static com.example.checkers.ui.Settings.DEFAULT_HINTS_ENABLED_KEY;
 import static com.example.checkers.ui.Settings.DEFAULT_MUSIC_ENABLED_KEY;
 import static com.example.checkers.ui.Settings.DEFAULT_SOUNDS_ENABLED_KEY;
+import static com.example.checkers.ui.Settings.HINTS_SETTINGS;
 import static com.example.checkers.ui.Settings.MUSIC_SETTINGS;
 import static com.example.checkers.ui.Settings.SOUNDS_SETTINGS;
 
@@ -19,23 +21,26 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.example.checkers.R;
-import com.example.checkers.data.ButtonSoundManager;
+import com.example.checkers.data.HintsManager;
+import com.example.checkers.data.SoundsManager;
 import com.example.checkers.data.MusicManager;
 
 
-public class MainActivity extends AppCompatActivity implements MusicManager, ButtonSoundManager {
+public class MainActivity extends AppCompatActivity implements MusicManager, SoundsManager, HintsManager {
     private MediaPlayer appMusic;
     private SoundPool buttonSound;
+    private SoundPool deskSound;
     protected SharedPreferences settings;
 
     private int buttonSoundId;
+    private int deskSoundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        addFragment(new Menu(this, this));
+        addFragment(new Menu(this, this, this));
 
         appMusic = MediaPlayer.create(MainActivity.this, R.raw.defaultmusic);
         appMusic.setLooping(true);
@@ -49,6 +54,15 @@ public class MainActivity extends AppCompatActivity implements MusicManager, But
                 )
                 .build();
         buttonSoundId = buttonSound.load(this, R.raw.buttonclick, 1);
+
+        deskSound = new SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_GAME).build()
+                )
+                .build();
+        deskSoundId = deskSound.load(this, R.raw.wood, 1);
         settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
@@ -96,9 +110,23 @@ public class MainActivity extends AppCompatActivity implements MusicManager, But
     }
 
     @Override
-    public boolean isButtonSoundEnabled() {
+    public void setDeskSoundEnabled(boolean enabled) {
+        if (enabled) deskSound.play(deskSoundId, 1, 1, 1, 0, 1);
+        settings.edit().putBoolean(SOUNDS_SETTINGS, enabled).apply();
+    }
+
+    @Override
+    public boolean isSoundsEnabled() {
         return settings.getBoolean(SOUNDS_SETTINGS, DEFAULT_SOUNDS_ENABLED_KEY);
     }
 
+    @Override
+    public boolean isHintsEnabled() {
+        return settings.getBoolean(HINTS_SETTINGS, DEFAULT_HINTS_ENABLED_KEY);
+    }
 
+    @Override
+    public void setHintsEnabled(boolean enabled) {
+        settings.edit().putBoolean(HINTS_SETTINGS, enabled).apply();
+    }
 }
