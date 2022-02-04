@@ -17,17 +17,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.GameRules"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.Game"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.EndGameForBlack"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.EndGameForWhite"
-            android:screenOrientation="portrait" />
     </application>
 </manifest>

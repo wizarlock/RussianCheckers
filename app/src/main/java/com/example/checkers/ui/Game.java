@@ -1,17 +1,21 @@
 package com.example.checkers.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import com.example.checkers.R;
+import com.example.checkers.data.OnCheckerActionListener;
+import com.example.checkers.databinding.FragmentGameBinding;
 import com.example.checkers.model.Cell;
 import com.example.checkers.model.Checker;
 import com.example.checkers.model.CheckersDesk;
@@ -21,22 +25,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-
-public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerActionListener {
-    public LinearLayout table;
-    public final CheckersDesk desk = new CheckersDesk();
+public class Game extends Fragment implements OnCheckerActionListener {
+    private FragmentGameBinding binding;
+    public final CheckersDesk gameDesk = new CheckersDesk();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.game);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentGameBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        table = findViewById(R.id.desk);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        animationAppearance(binding.desk, () -> {
+            gameDesk.checkersDesk();
+            gameDesk.setOnCheckerActionListener(Game.this);
+            gameDesk.initDesk();
+            for (int i = 0; i <= 7; i++)
+                for (int j = 0; j <= 7; j++) {
+                    ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
+                    gr.getChildAt(j).setOnClickListener(gameDesk::startGame);
 
-        desk.checkersDesk();
-        desk.setOnCheckerActionListener(this);
-        desk.initDesk();
+                }
+        });
+    }
+
+    private void animationAppearance(View view, Runnable onAnimationEnd) {
+        view.animate()
+                .alpha(0f)
+                .setDuration(0)
+                .withEndAction(() -> view.animate().alpha(1f).setDuration(2000).withEndAction(onAnimationEnd));
     }
 
     private View findWithTag(ViewGroup parent, Object tag) {
@@ -48,27 +68,24 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
     }
 
     public LinearLayout getCheckerLayout(Cell cell) {
-        LinearLayout row = (LinearLayout) findWithTag(table, String.valueOf(cell.getY()));
+        LinearLayout row = (LinearLayout) findWithTag(binding.desk, String.valueOf(cell.getY()));
         return Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
     }
 
-    //Добавляет картинку шашки на клетку
     @Override
     public void onCheckerAdded(Cell cell) {
-        ImageView checkerImage = new ImageView(this);
+        ImageView checkerImage = new ImageView(requireContext());
         checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.white : R.drawable.black);
         getCheckerLayout(cell).addView(checkerImage);
     }
 
-    //Добавляет картинку дамки на клетку
     @Override
     public void onQueenAdded(Cell cell) {
-        ImageView checkerImage = new ImageView(this);
+        ImageView checkerImage = new ImageView(requireContext());
         checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.queen1 : R.drawable.queen0);
         getCheckerLayout(cell).addView(checkerImage);
     }
 
-    //Перемещает картинку с одной клетки на другую
     @Override
     public void onCheckerMoved(Cell from, Cell to) {
         View checkerImage = getCheckerLayout(from).getChildAt(0);
@@ -76,52 +93,32 @@ public class Game extends AppCompatActivity implements CheckersDesk.OnCheckerAct
         getCheckerLayout(to).addView(checkerImage);
     }
 
-    //Удаляет картинку с клетки
     @Override
     public void onCheckerRemoved(Cell cell) {
         View checkerImage = getCheckerLayout(cell).getChildAt(0);
         getCheckerLayout(cell).removeView(checkerImage);
     }
 
-    //Подсвечивает клетки
     @Override
     public List<View> colorForMoves(List<Map<Cell, Cell>> pairs, View view, List<List<Cell>> cells, Cell cell) {
         List<View> views = new ArrayList<>();
         if (cells.get(cell.getY()).get(cell.getX()).getChecker() != null) {
-            view.setBackgroundColor(ContextCompat.getColor(this, R.color.pick));
+            view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.pick));
             views.add(view);
         }
         for (int i = 0; i <= pairs.size() - 1; i++) {
             for (Map.Entry<Cell, Cell> entry : pairs.get(i).entrySet()) {
-                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(this, R.color.variants));
+                getCheckerLayout(entry.getKey()).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.variants));
                 views.add(getCheckerLayout(entry.getKey()));
             }
         }
         return views;
     }
 
-    //Очищает доску от подсвеченных клеток
     @Override
     public void boardClear(List<View> views) {
         for (int i = 0; i <= views.size() - 1; i++) {
-            views.get(i).setBackgroundColor(ContextCompat.getColor(this, R.color.brown));
+            views.get(i).setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.brown));
         }
-    }
-
-    //Осуществляет переход на другую активити, если игра завершена
-    public void toFinish(String win) {
-        Intent intent;
-        if (win.equals("White")) {
-            intent = new Intent(Game.this, EndGameForWhite.class);
-        } else {
-            intent = new Intent(Game.this, EndGameForBlack.class);
-        }
-        startActivity(intent);
-        finish();
-    }
-
-    public void onClick(View view) {
-        String win = desk.startGame(view);
-        if (!win.equals("")) toFinish(win);
     }
 }
