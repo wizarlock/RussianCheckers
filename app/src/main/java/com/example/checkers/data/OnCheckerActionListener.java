@@ -23,4 +23,6 @@ public interface OnCheckerActionListener {
     void colorForEat(List<CellsForEating> cells, Cell requiredCell);
 
     void boardClear();
+
+    void finish(boolean blackMoves);
 }

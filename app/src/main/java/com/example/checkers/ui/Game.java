@@ -1,11 +1,13 @@
 package com.example.checkers.ui;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,6 +142,28 @@ public class Game extends Fragment implements OnCheckerActionListener {
         for (View view : viewsForClear)
             view.setBackgroundResource(R.drawable.brownwood);
         viewsForClear.clear();
+    }
+
+    @Override
+    public void finish(boolean blackMoves) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        if (blackMoves) builder.setMessage("Whites win!");
+        else builder.setMessage("Blacks win!");
+        builder.setCancelable(false)
+                .setPositiveButton("Restart game", (dialogInterface, i) -> {
+                    FragmentTransaction ft = requireFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out);
+                    ft.replace(R.id.frPlace, new Game(soundsManager, hintsManager));
+                    ft.addToBackStack(null);
+                    ft.commit();
+                })
+                .setNegativeButton("Menu", (dialogInterface, i) -> {
+                    requireFragmentManager().popBackStackImmediate();
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setTitle("Game is over");
+        alertDialog.show();
+
     }
 }
 

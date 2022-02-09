@@ -9,6 +9,8 @@ import java.util.Objects;
 import static com.example.checkers.model.Checker.Colors.BLACK;
 import static com.example.checkers.model.Checker.Colors.WHITE;
 
+import androidx.annotation.ArrayRes;
+
 import com.example.checkers.data.OnCheckerActionListener;
 
 public class CheckersDesk {
@@ -211,7 +213,6 @@ public class CheckersDesk {
                 if (eatMore.size() != 0) {
                     selectedCell = list.getMoving();
                     requiredMovesForChecker = eatMore;
-                    numberOfClicks = 1;
                 } else {
                     blacksMoves = !blacksMoves;
                     numberOfClicks = 0;
@@ -232,6 +233,31 @@ public class CheckersDesk {
         }
     }
 
+    private boolean checkBlocked() {
+        for (int i = 0; i < ROWS; i++)
+            for (int j = 0; j < COLUMNS; j++) {
+                Cell cell = getCell(i, j);
+                if (cell.getChecker() != null)
+                    if (checkCorrectnessColor(cell))
+                        if (ordinaryMoves(cell).size() != 0) return false;
+            }
+        return true;
+    }
+
+    private boolean finishGame() {
+        int counterForBlack = 0;
+        int counterForWhite = 0;
+        if (requiredMoves().size() == 0 && checkBlocked()) return true;
+        for (int i = 0; i < ROWS; i++)
+            for (int j = 0; j < COLUMNS; j++) {
+                Cell cell = getCell(i, j);
+                if (cell.getChecker() != null)
+                    if (cell.getChecker().getColor() == WHITE) counterForWhite++;
+                    else counterForBlack++;
+            }
+        return counterForBlack == 0 || counterForWhite == 0;
+    }
+
     public void startGame(View view) {
         if (numberOfClicks == 1) {
             Cell cellForSecondClick = Objects.requireNonNull(getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()), Integer.parseInt(view.getTag().toString())));
@@ -243,6 +269,8 @@ public class CheckersDesk {
                 blacksMoves = !blacksMoves;
                 numberOfClicks = 0;
             } else numberOfClicks = 0;
+
+            if (finishGame()) onCheckerActionListener.finish(blacksMoves);
         }
         if (numberOfClicks == 0) {
             Cell cellForFirstClick = getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()),
