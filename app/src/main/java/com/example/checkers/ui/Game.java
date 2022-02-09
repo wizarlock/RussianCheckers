@@ -32,7 +32,7 @@ import java.util.Objects;
 public class Game extends Fragment implements OnCheckerActionListener {
     private final SoundsManager soundsManager;
     private final HintsManager hintsManager;
-    private FragmentGameBinding binding;
+    private static FragmentGameBinding binding;
     public final CheckersDesk gameDesk = new CheckersDesk();
     private final List<View> viewsForClear = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class Game extends Fragment implements OnCheckerActionListener {
                 .withEndAction(() -> view.animate().alpha(1f).setDuration(2000).withEndAction(onAnimationEnd));
     }
 
-    private View findWithTag(ViewGroup parent, Object tag) {
+    private static View findWithTag(ViewGroup parent, Object tag) {
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (parent.getChildAt(i).getTag().equals(tag))
                 return parent.getChildAt(i);
@@ -78,7 +78,7 @@ public class Game extends Fragment implements OnCheckerActionListener {
         return null;
     }
 
-    public LinearLayout getCheckerLayout(Cell cell) {
+    public static LinearLayout getCheckerLayout(Cell cell) {
         LinearLayout row = (LinearLayout) findWithTag(binding.desk, String.valueOf(cell.getY()));
         return Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
     }

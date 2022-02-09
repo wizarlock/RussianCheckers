@@ -12,11 +12,13 @@ import static com.example.checkers.model.Checker.Colors.WHITE;
 import androidx.annotation.ArrayRes;
 
 import com.example.checkers.data.OnCheckerActionListener;
+import com.example.checkers.ui.Game;
 
 public class CheckersDesk {
     private Boolean blacksMoves = false;
     private int numberOfClicks;
     private Cell selectedCell;
+    private Cell eatingCell;
     private List<CellsForEating> requiredMovesForChecker;
     private List<Cell> ordinaryMovesForChecker;
     private static final int ROWS = 8;
@@ -211,9 +213,14 @@ public class CheckersDesk {
                 list.getEaten().setChecker(null);
                 List<CellsForEating> eatMore = canEatMore(list.getMoving());
                 if (eatMore.size() != 0) {
-                    selectedCell = list.getMoving();
+                    Cell newCell = list.getMoving();
+                    selectedCell = newCell;
+                    eatingCell = selectedCell;
                     requiredMovesForChecker = eatMore;
+                    onCheckerActionListener.colorForEat(requiredMovesForChecker, newCell);
+                    onCheckerActionListener.colorForPick(Game.getCheckerLayout(newCell));
                 } else {
+                    eatingCell = null;
                     blacksMoves = !blacksMoves;
                     numberOfClicks = 0;
                 }
@@ -275,14 +282,14 @@ public class CheckersDesk {
         if (numberOfClicks == 0) {
             Cell cellForFirstClick = getCell(Integer.parseInt(((View) view.getParent()).getTag().toString()),
                     Integer.parseInt(view.getTag().toString()));
-
             if (Objects.requireNonNull(cellForFirstClick).getChecker() != null)
-                if (checkCorrectnessColor(cellForFirstClick)) {
-                    onCheckerActionListener.colorForPick(view);
-                    selectedCell = cellForFirstClick;
-                    initMoves(cellForFirstClick);
-                    numberOfClicks = 1;
-                }
+                if (checkCorrectnessColor(cellForFirstClick))
+                    if (eatingCell == null || eatingCell.equals(cellForFirstClick)) {
+                        onCheckerActionListener.colorForPick(view);
+                        selectedCell = cellForFirstClick;
+                        initMoves(cellForFirstClick);
+                        numberOfClicks = 1;
+                    }
         }
     }
 }
