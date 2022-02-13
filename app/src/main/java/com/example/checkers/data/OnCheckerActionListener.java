@@ -25,4 +25,6 @@ public interface OnCheckerActionListener {
     void boardClear();
 
     void finish(boolean blackMoves);
+
+    void scoreChange(Integer newScoreForBlack, Integer newScoreForWhite, boolean blackMoves);
 }

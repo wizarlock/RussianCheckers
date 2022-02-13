@@ -8,9 +8,8 @@
     tools:context=".ui.MainActivity">
 
     <FrameLayout
-        tools:context=".ui.Menu"
         android:id="@+id/frPlace"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        tools:context=".ui.Menu" />
 </LinearLayout>

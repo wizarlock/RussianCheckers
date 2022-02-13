@@ -9,8 +9,6 @@ import java.util.Objects;
 import static com.example.checkers.model.Checker.Colors.BLACK;
 import static com.example.checkers.model.Checker.Colors.WHITE;
 
-import androidx.annotation.ArrayRes;
-
 import com.example.checkers.data.OnCheckerActionListener;
 import com.example.checkers.ui.Game;
 
@@ -21,6 +19,8 @@ public class CheckersDesk {
     private Cell eatingCell;
     private List<CellsForEating> requiredMovesForChecker;
     private List<Cell> ordinaryMovesForChecker;
+    private int scoreForBlack = 0;
+    private int scoreForWhite = 0;
     private static final int ROWS = 8;
     private final int COLUMNS = 8;
 
@@ -204,6 +204,12 @@ public class CheckersDesk {
         else return requiredMovesForOrdinaryChecker(cell);
     }
 
+    private void updateScore () {
+        if (blacksMoves) scoreForBlack++;
+        else scoreForWhite++;
+        onCheckerActionListener.scoreChange(scoreForBlack, scoreForWhite, blacksMoves);
+    }
+
     private void eatStart(Cell cell) {
         for (CellsForEating list : requiredMovesForChecker)
             if (selectedCell.equals(list.getRequiredCell()) && cell.equals(list.getMoving())) {
@@ -212,6 +218,7 @@ public class CheckersDesk {
                     onCheckerActionListener.onCheckerRemoved(list.getEaten());
                 list.getEaten().setChecker(null);
                 List<CellsForEating> eatMore = canEatMore(list.getMoving());
+                updateScore();
                 if (eatMore.size() != 0) {
                     Cell newCell = list.getMoving();
                     selectedCell = newCell;

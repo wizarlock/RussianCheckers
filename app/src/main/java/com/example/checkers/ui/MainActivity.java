@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements MusicManager, Sou
     private SoundPool buttonSound;
     private SoundPool deskSound;
     protected SharedPreferences settings;
-
     private int buttonSoundId;
     private int deskSoundId;
 

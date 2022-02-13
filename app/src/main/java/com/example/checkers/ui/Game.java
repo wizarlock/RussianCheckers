@@ -28,6 +28,7 @@ import com.example.checkers.model.CheckersDesk;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class Game extends Fragment implements OnCheckerActionListener {
     private final SoundsManager soundsManager;
@@ -35,6 +36,8 @@ public class Game extends Fragment implements OnCheckerActionListener {
     private static FragmentGameBinding binding;
     public final CheckersDesk gameDesk = new CheckersDesk();
     private final List<View> viewsForClear = new ArrayList<>();
+    long startTime;
+    long endTime;
 
     public Game(SoundsManager soundsManager, HintsManager hintsManager) {
         this.soundsManager = soundsManager;
@@ -51,7 +54,7 @@ public class Game extends Fragment implements OnCheckerActionListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        animationAppearance(binding.desk, () -> {
+        animationAppearance(binding.desk, 2000, () -> {
             gameDesk.checkersDesk();
             gameDesk.setOnCheckerActionListener(Game.this);
             gameDesk.initDesk();
@@ -60,14 +63,15 @@ public class Game extends Fragment implements OnCheckerActionListener {
                     ViewGroup gr = (ViewGroup) binding.desk.getChildAt(i);
                     gr.getChildAt(j).setOnClickListener(gameDesk::startGame);
                 }
+            startTime = System.currentTimeMillis();
         });
     }
 
-    private void animationAppearance(View view, Runnable onAnimationEnd) {
+    private void animationAppearance(View view, Integer duration, Runnable onAnimationEnd) {
         view.animate()
                 .alpha(0f)
                 .setDuration(0)
-                .withEndAction(() -> view.animate().alpha(1f).setDuration(2000).withEndAction(onAnimationEnd));
+                .withEndAction(() -> view.animate().alpha(1f).setDuration(duration).withEndAction(onAnimationEnd));
     }
 
     private static View findWithTag(ViewGroup parent, Object tag) {
@@ -83,18 +87,25 @@ public class Game extends Fragment implements OnCheckerActionListener {
         return Objects.requireNonNull(row).findViewWithTag(String.valueOf(cell.getX()));
     }
 
+    private void addImage(Cell cell, Integer white, Integer black) {
+        ImageView checkerImage = new ImageView(requireContext());
+        checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? white : black);
+        getCheckerLayout(cell).addView(checkerImage);
+    }
+
     @Override
     public void onCheckerAdded(Cell cell) {
         ImageView checkerImage = new ImageView(requireContext());
         checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.white : R.drawable.black);
         getCheckerLayout(cell).addView(checkerImage);
+        animationAppearance(checkerImage, 100, () -> {
+            soundsManager.setDeskSoundEnabled(soundsManager.isSoundsEnabled());
+        });
     }
 
     @Override
     public void onQueenAdded(Cell cell) {
-        ImageView checkerImage = new ImageView(requireContext());
-        checkerImage.setImageResource(cell.getChecker().getColor() == Checker.Colors.WHITE ? R.drawable.queen1 : R.drawable.queen0);
-        getCheckerLayout(cell).addView(checkerImage);
+        addImage(cell, R.drawable.queen1, R.drawable.queen0);
     }
 
     @Override
@@ -144,11 +155,16 @@ public class Game extends Fragment implements OnCheckerActionListener {
         viewsForClear.clear();
     }
 
+    private long getGameTime () {
+        endTime = System.currentTimeMillis();
+        return TimeUnit.MILLISECONDS.toSeconds(endTime - startTime);
+    }
+
     @Override
     public void finish(boolean blackMoves) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        if (blackMoves) builder.setMessage("Whites win!");
-        else builder.setMessage("Blacks win!");
+        if (blackMoves) builder.setMessage("Whites win! Time spent in the game: " + getGameTime() + " seconds");
+        else builder.setMessage("Blacks win! Time spent in the game: " + getGameTime() + " seconds");
         builder.setCancelable(false)
                 .setPositiveButton("Restart game", (dialogInterface, i) -> {
                     FragmentTransaction ft = requireFragmentManager().beginTransaction();
@@ -161,9 +177,13 @@ public class Game extends Fragment implements OnCheckerActionListener {
                     requireFragmentManager().popBackStackImmediate();
                 });
         AlertDialog alertDialog = builder.create();
-        alertDialog.setTitle("Game is over");
         alertDialog.show();
+    }
 
+    @Override
+    public void scoreChange(Integer newScoreForBlack, Integer newScoreForWhite, boolean blackMoves) {
+        if (blackMoves) binding.scoreForBlack.setText("Score: " + newScoreForBlack);
+        else binding.scoreForWhite.setText("Score: " + newScoreForWhite);
     }
 }
 
